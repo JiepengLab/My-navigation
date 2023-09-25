@@ -1,0 +1,1 @@
+var ACCESS_TOKEN_NAME="ss_admin_access_token",CSRF_TOKEN_NAME="CSRF-TOKEN",$apiUrl="/api/admin",$rootUrl="/ss-admin";
