@@ -26,8 +26,7 @@ function setHome(obj,vrl){
     }else{
       (new $.zui.ModalTrigger({
         custom: '<h3>您的浏览器不支持此操作，请手动将此页设为首页。</h3>'+
-        '<blockquote>1.打开浏览器设置.<br />2.点击"设置"》"启动时》"打开特定网页"》"输入网址"》确定.</blockquote>'+
-        '<p><a href="###"><i class="fa fa-link"></i>点击查看</a>详细教程</p>',
+        '<blockquote>Edge端: 打开浏览器设置.<br />2.点击"设置"→"开始、主页和新建标签页"→"输入网址"→确定.</blockquote>',
         title: '设为首页'
       })).show()
     }
@@ -113,6 +112,8 @@ function CustomMode(){
       
       //给当前元素的兄弟元素添加显示类，获取标题内容赋值给输入框，并让其焦点聚焦同时选中文字
       $(this).siblings().addClass("shaow-edit-category").val(getLink_tit.html()).focus().select();
+      
+        
       
       //输入框焦点失去时将输入框内容写入到localStorage
       $(".shaow-edit-category").blur(function(){
@@ -200,7 +201,7 @@ function CustomTheme(){
 //网站推荐
 $('#submit_URL').modalTrigger({
   type: 'iframe',
-  iframe: 'http://jiepenglab.github.io/notebook',
+  iframe: 'http://jiepenglab.github.io/notebook/',
   size: 'lg',
   height: '730px',
   title: '网站推荐'
@@ -291,7 +292,7 @@ $('#get-top').click(function(){
   $('body,html').animate({
     scrollTop: 0
   },
-  800);//点击回到顶部按钮，缓懂回到顶部,数字越小越快
+  800);//点击回到顶部按钮，缓慢回到顶部,数字越小越快
 })
 
 //判断用户使用的设备
