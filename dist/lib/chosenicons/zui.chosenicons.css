@@ -7,16 +7,19 @@
 
 .chosen-container.chosen-icons .chosen-results {
   padding: 5px;
-  }
+}
+
 .chosen-container.chosen-icons .chosen-results li {
   border-radius: 4px;
-  }
+}
+
 .chosen-container.chosen-icons .chosen-results li.group-result {
   padding: 5px 0;
   font-size: 12px;
   color: #666;
   border-radius: 0;
-  }
+}
+
 .chosen-container.chosen-icons .chosen-results li.group-option {
   display: inline-block;
   width: 30px;
@@ -24,4 +27,4 @@
   font-size: 14px;
   line-height: 14px;
   text-align: center;
-  }
+}

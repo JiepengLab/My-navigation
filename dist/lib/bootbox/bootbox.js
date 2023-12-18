@@ -16,13 +16,13 @@
 
 // @see https://github.com/makeusabrew/bootbox/issues/180
 // @see https://github.com/makeusabrew/bootbox/issues/186
-(function(root, factory) {
+(function (root, factory) {
 
     'use strict';
-    if(typeof define === "function" && define.amd) {
+    if (typeof define === "function" && define.amd) {
         // AMD. Register as an anonymous module.
         define(["jquery"], factory);
-    } else if(typeof exports === "object") {
+    } else if (typeof exports === "object") {
         // Node. Does not work with strict CommonJS, but
         // only CommonJS-like environments that support module.exports,
         // like Node.
@@ -104,7 +104,7 @@
         var preserveDialog = $.isFunction(callback) && callback.call(dialog, e) === false;
 
         // ... otherwise we'll bin it
-        if(!preserveDialog) {
+        if (!preserveDialog) {
             dialog.modal("hide");
         }
     }
@@ -112,7 +112,7 @@
     function getKeyLength(obj) {
         // @TODO defer to Object.keys(x).length if available?
         var k, t = 0;
-        for(k in obj) {
+        for (k in obj) {
             t++;
         }
         return t;
@@ -120,7 +120,7 @@
 
     function each(collection, iterator) {
         var index = 0;
-        $.each(collection, function(key, value) {
+        $.each(collection, function (key, value) {
             iterator(key, value, index++);
         });
     }
@@ -129,18 +129,18 @@
         var buttons;
         var total;
 
-        if(typeof options !== "object") {
+        if (typeof options !== "object") {
             throw new Error("Please supply an object of options");
         }
 
-        if(!options.message) {
+        if (!options.message) {
             throw new Error("Please specify a message");
         }
 
         // make sure any supplied options take precedence over defaults
         options = $.extend({}, defaults, options);
 
-        if(!options.buttons) {
+        if (!options.buttons) {
             options.buttons = {};
         }
 
@@ -148,9 +148,9 @@
 
         total = getKeyLength(buttons);
 
-        each(buttons, function(key, button, index) {
+        each(buttons, function (key, button, index) {
 
-            if($.isFunction(button)) {
+            if ($.isFunction(button)) {
                 // short form, assume value is our callback. Since button
                 // isn't an object it isn't a reference either so re-assign it
                 button = buttons[key] = {
@@ -159,17 +159,17 @@
             }
 
             // before any further checks make sure by now button is the correct type
-            if($.type(button) !== "object") {
+            if ($.type(button) !== "object") {
                 throw new Error("button with key " + key + " must be an object");
             }
 
-            if(!button.label) {
+            if (!button.label) {
                 // the lack of an explicit label means we'll assume the key is good enough
                 button.label = key;
             }
 
-            if(!button.className) {
-                if((total === 2 && (key === 'ok' || key === 'confirm')) || total === 1) {
+            if (!button.className) {
+                if ((total === 2 && (key === 'ok' || key === 'confirm')) || total === 1) {
                     // always add a primary to the main option in a two-button dialog
                     button.className = "btn-primary";
                 } else {
@@ -194,11 +194,11 @@
         var argn = args.length;
         var options = {};
 
-        if(argn < 1 || argn > 2) {
+        if (argn < 1 || argn > 2) {
             throw new Error("Invalid argument length");
         }
 
-        if(argn === 2 || typeof args[0] === "string") {
+        if (argn === 2 || typeof args[0] === "string") {
             options[properties[0]] = args[0];
             options[properties[1]] = args[1];
         } else {
@@ -261,7 +261,7 @@
     function createLabels() {
         var buttons = {};
 
-        for(var i = 0, j = arguments.length; i < j; i++) {
+        for (var i = 0, j = arguments.length; i < j; i++) {
             var argument = arguments[i];
             var key = argument.toLowerCase();
             var value = argument.toUpperCase();
@@ -276,12 +276,12 @@
 
     function validateButtons(options, buttons) {
         var allowedButtons = {};
-        each(buttons, function(key, value) {
+        each(buttons, function (key, value) {
             allowedButtons[value] = true;
         });
 
-        each(options.buttons, function(key) {
-            if(allowedButtons[key] === undefined) {
+        each(options.buttons, function (key) {
+            if (allowedButtons[key] === undefined) {
                 throw new Error("button key " + key + " is not allowed (options are " + buttons.join("\n") + ")");
             }
         });
@@ -289,20 +289,20 @@
         return options;
     }
 
-    exports.alert = function() {
+    exports.alert = function () {
         var options;
 
         options = mergeDialogOptions("alert", ["ok"], ["message", "callback"], arguments);
 
-        if(options.callback && !$.isFunction(options.callback)) {
+        if (options.callback && !$.isFunction(options.callback)) {
             throw new Error("alert requires callback property to be a function when provided");
         }
 
         /**
          * overrides
          */
-        options.buttons.ok.callback = options.onEscape = function() {
-            if($.isFunction(options.callback)) {
+        options.buttons.ok.callback = options.onEscape = function () {
+            if ($.isFunction(options.callback)) {
                 return options.callback.call(this);
             }
             return true;
@@ -311,7 +311,7 @@
         return exports.dialog(options);
     };
 
-    exports.confirm = function() {
+    exports.confirm = function () {
         var options;
 
         // ZUI change begin
@@ -322,23 +322,23 @@
         /**
          * overrides; undo anything the user tried to set they shouldn't have
          */
-        options.buttons.cancel.callback = options.onEscape = function() {
+        options.buttons.cancel.callback = options.onEscape = function () {
             return options.callback.call(this, false);
         };
 
-        options.buttons.confirm.callback = function() {
+        options.buttons.confirm.callback = function () {
             return options.callback.call(this, true);
         };
 
         // confirm specific validation
-        if(!$.isFunction(options.callback)) {
+        if (!$.isFunction(options.callback)) {
             throw new Error("confirm requires a callback");
         }
 
         return exports.dialog(options);
     };
 
-    exports.prompt = function() {
+    exports.prompt = function () {
         var options;
         var defaults;
         var dialog;
@@ -382,14 +382,14 @@
          */
         options.message = form;
 
-        options.buttons.cancel.callback = options.onEscape = function() {
+        options.buttons.cancel.callback = options.onEscape = function () {
             return options.callback.call(this, null);
         };
 
-        options.buttons.confirm.callback = function() {
+        options.buttons.confirm.callback = function () {
             var value;
 
-            switch(options.inputType) {
+            switch (options.inputType) {
                 case "text":
                 case "textarea":
                 case "email":
@@ -408,7 +408,7 @@
                     // hence we default to an empty array
                     value = [];
 
-                    each(checkedItems, function(_, item) {
+                    each(checkedItems, function (_, item) {
                         value.push($(item).val());
                     });
                     break;
@@ -420,22 +420,22 @@
         options.show = false;
 
         // prompt specific validation
-        if(!options.title) {
+        if (!options.title) {
             throw new Error("prompt requires a title");
         }
 
-        if(!$.isFunction(options.callback)) {
+        if (!$.isFunction(options.callback)) {
             throw new Error("prompt requires a callback");
         }
 
-        if(!templates.inputs[options.inputType]) {
+        if (!templates.inputs[options.inputType]) {
             throw new Error("invalid prompt type");
         }
 
         // create the input based on the supplied type
         input = $(templates.inputs[options.inputType]);
 
-        switch(options.inputType) {
+        switch (options.inputType) {
             case "text":
             case "textarea":
             case "email":
@@ -450,28 +450,28 @@
                 var groups = {};
                 inputOptions = options.inputOptions || [];
 
-                if(!$.isArray(inputOptions)) {
+                if (!$.isArray(inputOptions)) {
                     throw new Error("Please pass an array of input options");
                 }
 
-                if(!inputOptions.length) {
+                if (!inputOptions.length) {
                     throw new Error("prompt with select requires options");
                 }
 
-                each(inputOptions, function(_, option) {
+                each(inputOptions, function (_, option) {
 
                     // assume the element to attach to is the input...
                     var elem = input;
 
-                    if(option.value === undefined || option.text === undefined) {
+                    if (option.value === undefined || option.text === undefined) {
                         throw new Error("given options in wrong format");
                     }
 
                     // ... but override that element if this option sits in a group
 
-                    if(option.group) {
+                    if (option.group) {
                         // initialise group if necessary
-                        if(!groups[option.group]) {
+                        if (!groups[option.group]) {
                             groups[option.group] = $("<optgroup/>").attr("label", option.group);
                         }
 
@@ -481,7 +481,7 @@
                     elem.append("<option value='" + option.value + "'>" + option.text + "</option>");
                 });
 
-                each(groups, function(_, group) {
+                each(groups, function (_, group) {
                     input.append(group);
                 });
 
@@ -493,11 +493,11 @@
                 var values = $.isArray(options.value) ? options.value : [options.value];
                 inputOptions = options.inputOptions || [];
 
-                if(!inputOptions.length) {
+                if (!inputOptions.length) {
                     throw new Error("prompt with checkbox requires options");
                 }
 
-                if(!inputOptions[0].value || !inputOptions[0].text) {
+                if (!inputOptions[0].value || !inputOptions[0].text) {
                     throw new Error("given options in wrong format");
                 }
 
@@ -506,15 +506,15 @@
                 // our 'input' element to this container instead
                 input = $("<div/>");
 
-                each(inputOptions, function(_, option) {
+                each(inputOptions, function (_, option) {
                     var checkbox = $(templates.inputs[options.inputType]);
 
                     checkbox.find("input").attr("value", option.value);
                     checkbox.find("label").append(option.text);
 
                     // we've ensured values is an array so we can always iterate over it
-                    each(values, function(_, value) {
-                        if(value === option.value) {
+                    each(values, function (_, value) {
+                        if (value === option.value) {
                             checkbox.find("input").prop("checked", true);
                         }
                     });
@@ -526,22 +526,22 @@
 
         // @TODO provide an attributes option instead
         // and simply map that as keys: vals
-        if(options.placeholder) {
+        if (options.placeholder) {
             input.attr("placeholder", options.placeholder);
         }
 
-        if(options.pattern) {
+        if (options.pattern) {
             input.attr("pattern", options.pattern);
         }
 
-        if(options.maxlength) {
+        if (options.maxlength) {
             input.attr("maxlength", options.maxlength);
         }
 
         // now place it in our form
         form.append(input);
 
-        form.on("submit", function(e) {
+        form.on("submit", function (e) {
             e.preventDefault();
             // Fix for SammyJS (or similar JS routing library) hijacking the form post.
             e.stopPropagation();
@@ -556,20 +556,20 @@
         dialog.off("shown.zui.modal");
 
         // ...and replace it with one focusing our input, if possible
-        dialog.on("shown.zui.modal", function() {
+        dialog.on("shown.zui.modal", function () {
             // need the closure here since input isn't
             // an object otherwise
             input.focus();
         });
 
-        if(shouldShow === true) {
+        if (shouldShow === true) {
             dialog.modal("show");
         }
 
         return dialog;
     };
 
-    exports.dialog = function(options) {
+    exports.dialog = function (options) {
         options = sanitize(options);
 
 
@@ -582,7 +582,7 @@
             onEscape: options.onEscape
         };
 
-        if($.fn.modal === undefined) {
+        if ($.fn.modal === undefined) {
             throw new Error(
                 "$.fn.modal is not defined; please double check you have included " +
                 "the Bootstrap JavaScript library. See http://getbootstrap.com/javascript/ " +
@@ -590,7 +590,7 @@
             );
         }
 
-        each(buttons, function(key, button) {
+        each(buttons, function (key, button) {
 
             // @TODO I don't like this string appending to itself; bit dirty. Needs reworking
             // can we just build up button elements instead? slower but neater. Then button
@@ -601,39 +601,39 @@
 
         body.find(".bootbox-body").html(options.message);
 
-        if(options.animate === true) {
+        if (options.animate === true) {
             dialog.addClass("fade");
         }
 
-        if(options.className) {
+        if (options.className) {
             dialog.addClass(options.className);
         }
 
-        if(options.size === "large") {
+        if (options.size === "large") {
             innerDialog.addClass("modal-lg");
-        } else if(options.size === "small") {
+        } else if (options.size === "small") {
             innerDialog.addClass("modal-sm");
         }
 
-        if(options.title) {
+        if (options.title) {
             body.before(templates.header);
         }
 
-        if(options.closeButton) {
+        if (options.closeButton) {
             var closeButton = $(templates.closeButton);
 
-            if(options.title) {
+            if (options.title) {
                 dialog.find(".modal-header").prepend(closeButton);
             } else {
                 closeButton.css("margin-top", "-10px").prependTo(body);
             }
         }
 
-        if(options.title) {
+        if (options.title) {
             dialog.find(".modal-title").html(options.title);
         }
 
-        if(buttonStr.length) {
+        if (buttonStr.length) {
             body.after(templates.footer);
             dialog.find(".modal-footer").html(buttonStr);
         }
@@ -645,11 +645,11 @@
          * modal has performed certain actions
          */
 
-        dialog.on("hidden.zui.modal", function(e) {
+        dialog.on("hidden.zui.modal", function (e) {
             // ensure we don't accidentally intercept hidden events triggered
             // by children of the current dialog. We shouldn't anymore now BS
             // namespaces its events; but still worth doing
-            if(e.target === this) {
+            if (e.target === this) {
                 dialog.remove();
             }
         });
@@ -665,7 +665,7 @@
         });
         */
 
-        dialog.on("shown.zui.modal", function() {
+        dialog.on("shown.zui.modal", function () {
             dialog.find(".btn-primary:first").focus();
         });
 
@@ -675,7 +675,7 @@
          * respective triggers
          */
 
-        if(options.backdrop !== "static") {
+        if (options.backdrop !== "static") {
             // A boolean true/false according to the Bootstrap docs
             // should show a dialog the user can dismiss by clicking on
             // the background.
@@ -684,14 +684,14 @@
             // this event (the .modal-backdrop swallows it)
             // However, we still want to sort of respect true
             // and invoke the escape mechanism instead
-            dialog.on("click.dismiss.zui.modal", function(e) {
+            dialog.on("click.dismiss.zui.modal", function (e) {
                 // @NOTE: the target varies in >= 3.3.x releases since the modal backdrop
                 // moved *inside* the outer dialog rather than *alongside* it
-                if(dialog.children(".modal-backdrop").length) {
+                if (dialog.children(".modal-backdrop").length) {
                     e.currentTarget = dialog.children(".modal-backdrop").get(0);
                 }
 
-                if(e.target !== e.currentTarget) {
+                if (e.target !== e.currentTarget) {
                     return;
                 }
 
@@ -699,8 +699,8 @@
             });
         }
 
-        dialog.on("escape.close.bb", function(e) {
-            if(callbacks.onEscape) {
+        dialog.on("escape.close.bb", function (e) {
+            if (callbacks.onEscape) {
                 processCallback(e, dialog, callbacks.onEscape);
             }
         });
@@ -710,21 +710,21 @@
          * interaction with our dialog
          */
 
-        dialog.on("click", ".modal-footer button", function(e) {
+        dialog.on("click", ".modal-footer button", function (e) {
             var callbackKey = $(this).data("bb-handler");
 
             processCallback(e, dialog, callbacks[callbackKey]);
         });
 
-        dialog.on("click", ".bootbox-close-button", function(e) {
+        dialog.on("click", ".bootbox-close-button", function (e) {
             // onEscape might be falsy but that's fine; the fact is
             // if the user has managed to click the close button we
             // have to close the dialog, callback or not
             processCallback(e, dialog, callbacks.onEscape);
         });
 
-        dialog.on("keyup", function(e) {
-            if(e.which === 27) {
+        dialog.on("keyup", function (e) {
+            if (e.which === 27) {
                 dialog.trigger("escape.close.bb");
             }
         });
@@ -742,7 +742,7 @@
             show: false
         });
 
-        if(options.show) {
+        if (options.show) {
             dialog.modal("show");
         }
 
@@ -770,10 +770,10 @@
 
     };
 
-    exports.setDefaults = function() {
+    exports.setDefaults = function () {
         var values = {};
 
-        if(arguments.length === 2) {
+        if (arguments.length === 2) {
             // allow passing of single key/value...
             values[arguments[0]] = arguments[1];
         } else {
@@ -784,7 +784,7 @@
         $.extend(defaults, values);
     };
 
-    exports.hideAll = function() {
+    exports.hideAll = function () {
         $(".bootbox").modal("hide");
 
         return exports;
@@ -813,9 +813,9 @@
         }
     };
 
-    exports.addLocale = function(name, values) {
-        $.each(["OK", "CANCEL", "CONFIRM"], function(_, v) {
-            if(!values[v]) {
+    exports.addLocale = function (name, values) {
+        $.each(["OK", "CANCEL", "CONFIRM"], function (_, v) {
+            if (!values[v]) {
                 throw new Error("Please supply a translation for '" + v + "'");
             }
         });
@@ -829,17 +829,17 @@
         return exports;
     };
 
-    exports.removeLocale = function(name) {
+    exports.removeLocale = function (name) {
         delete locales[name];
 
         return exports;
     };
 
-    exports.setLocale = function(name) {
+    exports.setLocale = function (name) {
         return exports.setDefaults("locale", name);
     };
 
-    exports.init = function(_$) {
+    exports.init = function (_$) {
         return init(_$ || $);
     };
 

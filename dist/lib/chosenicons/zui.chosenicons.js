@@ -13,10 +13,10 @@
  * ======================================================================== */
 
 
-+ function($) {
++ function ($) {
     'use strict';
 
-    var ChosenIcons = function(element, options) {
+    var ChosenIcons = function (element, options) {
         this.$ = $(element);
         this.options = this.getOptions(options);
         this.lang = ChosenIcons.LANGS[this.options.lang];
@@ -63,7 +63,7 @@
         otherIcons: '其他圖標'
     };
 
-    ChosenIcons.prototype.getOptions = function(options) {
+    ChosenIcons.prototype.getOptions = function (options) {
         options = $.extend(true, {
             placeholder_text: ' ',
             disable_search: true,
@@ -73,20 +73,20 @@
         return options;
     };
 
-    ChosenIcons.prototype.init = function() {
+    ChosenIcons.prototype.init = function () {
         var that = this;
         var $this = this.$.addClass('chosen-icons').addClass(this.id).removeClass('form-control');
 
         $this.empty();
 
-        if(this.options.optional) {
+        if (this.options.optional) {
             $this.append(this.getOptionHtml());
         }
 
         var lang = this.lang;
 
         var iconsHtml = [];
-        $.each(this.options.icons, function(name, icons) {
+        $.each(this.options.icons, function (name, icons) {
             iconsHtml.push(that.getgroupHtml(name, icons));
         });
 
@@ -96,17 +96,17 @@
 
         var chosenSelector = '.chosen-container.' + this.id;
 
-        $this.on('chosen:showing_dropdown', function() {
-            $(chosenSelector + ' .chosen-results .group-option').each(function() {
+        $this.on('chosen:showing_dropdown', function () {
+            $(chosenSelector + ' .chosen-results .group-option').each(function () {
                 var $this = $(this).addClass('icon');
                 var text = $(this).text();
                 $this.html('<i class="icon-' + text + '" title="' + text + '"></i>');
             });
-        }).change(function() {
+        }).change(function () {
             var span = $(chosenSelector + ' .chosen-single > span');
             var text = $(this).val();
 
-            if(text && text.length > 0) {
+            if (text && text.length > 0) {
                 span.html('<i class="' + text + '"></i> &nbsp; <span class="text-muted">' + text.substr(5).replace(/-/g, ' ') + '</span>');
             }
             else {
@@ -115,26 +115,26 @@
         });
 
         var val = $this.data('value');
-        if(val) {
+        if (val) {
             $this.val(val).change();
         }
     }
 
-    ChosenIcons.prototype.getgroupHtml = function(name, icons) {
+    ChosenIcons.prototype.getgroupHtml = function (name, icons) {
         icons = icons || this.options.icons[name]
         var iconsHtml = [],
             that = this;
 
-        $.each(icons, function(i, icon) {
+        $.each(icons, function (i, icon) {
             iconsHtml.push(that.getOptionHtml(icon));
         });
 
         return '<optgroup label="' + this.lang[name + 'Icons'] + '">' + iconsHtml.join('') + '</optgroup>';
     }
 
-    ChosenIcons.prototype.getOptionHtml = function(value) {
+    ChosenIcons.prototype.getOptionHtml = function (value) {
         var name = value;
-        if(value && value.length > 0) {
+        if (value && value.length > 0) {
             value = 'icon-' + value;
         } else {
             value = '';
@@ -143,15 +143,15 @@
         return '<option value="' + value + '">' + name + '</option>';
     }
 
-    $.fn.chosenIcons = function(option) {
-        return this.each(function() {
+    $.fn.chosenIcons = function (option) {
+        return this.each(function () {
             var $this = $(this);
             var data = $this.data('zui.chosenIcons');
             var options = typeof option == 'object' && option;
 
-            if(!data) $this.data('zui.chosenIcons', (data = new ChosenIcons(this, options)));
+            if (!data) $this.data('zui.chosenIcons', (data = new ChosenIcons(this, options)));
 
-            if(typeof option == 'string') data[option]();
+            if (typeof option == 'string') data[option]();
         })
     };
 

@@ -29,7 +29,7 @@
 /// Add jquery object to namespace
 
 /// (function(){ // Old code
-(function($) {
+(function ($) {
 
     /// ----- ZUI change end -----
 
@@ -46,15 +46,15 @@
         previous = root.Chart;
 
     //Occupy the global variable of Chart, and create a simple base class
-    var Chart = function(context) {
+    var Chart = function (context) {
         var chart = this;
         this.canvas = context.canvas;
 
         this.ctx = context;
 
         //Variables global to the chart
-        var computeDimension = function(element, dimension) {
-            if(element['offset' + dimension]) {
+        var computeDimension = function (element, dimension) {
+            if (element['offset' + dimension]) {
                 return element['offset' + dimension];
             } else {
                 return document.defaultView.getComputedStyle(element).getPropertyValue(dimension);
@@ -208,10 +208,10 @@
             multiTooltipKeyBackground: '#fff',
 
             // Function - Will fire on animation progression.
-            onAnimationProgress: function() {},
+            onAnimationProgress: function () { },
 
             // Function - Will fire on animation completion.
-            onAnimationComplete: function() {}
+            onAnimationComplete: function () { }
 
         }
     };
@@ -223,96 +223,96 @@
     var helpers = Chart.helpers = {};
 
     //-- Basic js utility methods
-    var each = helpers.each = function(loopable, callback, self) {
-            var additionalArgs = Array.prototype.slice.call(arguments, 3);
-            // Check to see if null or undefined firstly.
-            if(loopable) {
-                if(loopable.length === +loopable.length) {
-                    var i;
-                    for(i = 0; i < loopable.length; i++) {
-                        callback.apply(self, [loopable[i], i].concat(additionalArgs));
-                    }
-                } else {
-                    for(var item in loopable) {
-                        callback.apply(self, [loopable[item], item].concat(additionalArgs));
-                    }
+    var each = helpers.each = function (loopable, callback, self) {
+        var additionalArgs = Array.prototype.slice.call(arguments, 3);
+        // Check to see if null or undefined firstly.
+        if (loopable) {
+            if (loopable.length === +loopable.length) {
+                var i;
+                for (i = 0; i < loopable.length; i++) {
+                    callback.apply(self, [loopable[i], i].concat(additionalArgs));
+                }
+            } else {
+                for (var item in loopable) {
+                    callback.apply(self, [loopable[item], item].concat(additionalArgs));
                 }
             }
-        },
-        clone = helpers.clone = function(obj) {
+        }
+    },
+        clone = helpers.clone = function (obj) {
             var objClone = {};
-            each(obj, function(value, key) {
-                if(obj.hasOwnProperty(key)) objClone[key] = value;
+            each(obj, function (value, key) {
+                if (obj.hasOwnProperty(key)) objClone[key] = value;
             });
             return objClone;
         },
-        extend = helpers.extend = function(base) {
-            each(Array.prototype.slice.call(arguments, 1), function(extensionObject) {
-                each(extensionObject, function(value, key) {
-                    if(extensionObject.hasOwnProperty(key)) base[key] = value;
+        extend = helpers.extend = function (base) {
+            each(Array.prototype.slice.call(arguments, 1), function (extensionObject) {
+                each(extensionObject, function (value, key) {
+                    if (extensionObject.hasOwnProperty(key)) base[key] = value;
                 });
             });
             return base;
         },
-        merge = helpers.merge = function(base, master) {
+        merge = helpers.merge = function (base, master) {
             //Merge properties in left object over to a shallow clone of object right.
             var args = Array.prototype.slice.call(arguments, 0);
             args.unshift({});
             return extend.apply(null, args);
         },
-        indexOf = helpers.indexOf = function(arrayToSearch, item) {
-            if(Array.prototype.indexOf) {
+        indexOf = helpers.indexOf = function (arrayToSearch, item) {
+            if (Array.prototype.indexOf) {
                 return arrayToSearch.indexOf(item);
             } else {
-                for(var i = 0; i < arrayToSearch.length; i++) {
-                    if(arrayToSearch[i] === item) return i;
+                for (var i = 0; i < arrayToSearch.length; i++) {
+                    if (arrayToSearch[i] === item) return i;
                 }
                 return -1;
             }
         },
-        where = helpers.where = function(collection, filterCallback) {
+        where = helpers.where = function (collection, filterCallback) {
             var filtered = [];
 
-            helpers.each(collection, function(item) {
-                if(filterCallback(item)) {
+            helpers.each(collection, function (item) {
+                if (filterCallback(item)) {
                     filtered.push(item);
                 }
             });
 
             return filtered;
         },
-        findNextWhere = helpers.findNextWhere = function(arrayToSearch, filterCallback, startIndex) {
+        findNextWhere = helpers.findNextWhere = function (arrayToSearch, filterCallback, startIndex) {
             // Default to start of the array
-            if(!startIndex) {
+            if (!startIndex) {
                 startIndex = -1;
             }
-            for(var i = startIndex + 1; i < arrayToSearch.length; i++) {
+            for (var i = startIndex + 1; i < arrayToSearch.length; i++) {
                 var currentItem = arrayToSearch[i];
-                if(filterCallback(currentItem)) {
+                if (filterCallback(currentItem)) {
                     return currentItem;
                 }
             }
         },
-        findPreviousWhere = helpers.findPreviousWhere = function(arrayToSearch, filterCallback, startIndex) {
+        findPreviousWhere = helpers.findPreviousWhere = function (arrayToSearch, filterCallback, startIndex) {
             // Default to end of the array
-            if(!startIndex) {
+            if (!startIndex) {
                 startIndex = arrayToSearch.length;
             }
-            for(var i = startIndex - 1; i >= 0; i--) {
+            for (var i = startIndex - 1; i >= 0; i--) {
                 var currentItem = arrayToSearch[i];
-                if(filterCallback(currentItem)) {
+                if (filterCallback(currentItem)) {
                     return currentItem;
                 }
             }
         },
-        inherits = helpers.inherits = function(extensions) {
+        inherits = helpers.inherits = function (extensions) {
             //Basic javascript inheritance based on the model created in Backbone.js
             var parent = this;
-            var ChartElement = (extensions && extensions.hasOwnProperty("constructor")) ? extensions.constructor : function() {
+            var ChartElement = (extensions && extensions.hasOwnProperty("constructor")) ? extensions.constructor : function () {
                 return parent.apply(this, arguments);
             };
 
-            var Surrogate = function() {
+            var Surrogate = function () {
                 this.constructor = ChartElement;
             };
             Surrogate.prototype = parent.prototype;
@@ -320,58 +320,58 @@
 
             ChartElement.extend = inherits;
 
-            if(extensions) extend(ChartElement.prototype, extensions);
+            if (extensions) extend(ChartElement.prototype, extensions);
 
             ChartElement.__super__ = parent.prototype;
 
             return ChartElement;
         },
-        noop = helpers.noop = function() {},
-        uid = helpers.uid = (function() {
+        noop = helpers.noop = function () { },
+        uid = helpers.uid = (function () {
             var id = 0;
-            return function() {
+            return function () {
                 return "chart-" + id++;
             };
         })(),
-        warn = helpers.warn = function(str) {
+        warn = helpers.warn = function (str) {
             //Method for warning of errors
-            if(window.console && typeof window.console.warn == "function") console.warn(str);
+            if (window.console && typeof window.console.warn == "function") console.warn(str);
         },
         amd = helpers.amd = (typeof define == 'function' && define.amd),
         //-- Math methods
-        isNumber = helpers.isNumber = function(n) {
+        isNumber = helpers.isNumber = function (n) {
             return !isNaN(parseFloat(n)) && isFinite(n);
         },
-        max = helpers.max = function(array) {
+        max = helpers.max = function (array) {
             return Math.max.apply(Math, array);
         },
-        min = helpers.min = function(array) {
+        min = helpers.min = function (array) {
             return Math.min.apply(Math, array);
         },
-        cap = helpers.cap = function(valueToCap, maxValue, minValue) {
-            if(isNumber(maxValue)) {
-                if(valueToCap > maxValue) {
+        cap = helpers.cap = function (valueToCap, maxValue, minValue) {
+            if (isNumber(maxValue)) {
+                if (valueToCap > maxValue) {
                     return maxValue;
                 }
-            } else if(isNumber(minValue)) {
-                if(valueToCap < minValue) {
+            } else if (isNumber(minValue)) {
+                if (valueToCap < minValue) {
                     return minValue;
                 }
             }
             return valueToCap;
         },
-        getDecimalPlaces = helpers.getDecimalPlaces = function(num) {
-            if(num % 1 !== 0 && isNumber(num)) {
+        getDecimalPlaces = helpers.getDecimalPlaces = function (num) {
+            if (num % 1 !== 0 && isNumber(num)) {
                 return num.toString().split(".")[1].length;
             } else {
                 return 0;
             }
         },
-        toRadians = helpers.radians = function(degrees) {
+        toRadians = helpers.radians = function (degrees) {
             return degrees * (Math.PI / 180);
         },
         // Gets the angle from vertical upright to the point about a centre.
-        getAngleFromPoint = helpers.getAngleFromPoint = function(centrePoint, anglePoint) {
+        getAngleFromPoint = helpers.getAngleFromPoint = function (centrePoint, anglePoint) {
             var distanceFromXCenter = anglePoint.x - centrePoint.x,
                 distanceFromYCenter = anglePoint.y - centrePoint.y,
                 radialDistanceFromCenter = Math.sqrt(distanceFromXCenter * distanceFromXCenter + distanceFromYCenter * distanceFromYCenter);
@@ -380,7 +380,7 @@
             var angle = Math.PI * 2 + Math.atan2(distanceFromYCenter, distanceFromXCenter);
 
             //If the segment is in the top left quadrant, we need to add another rotation to the angle
-            if(distanceFromXCenter < 0 && distanceFromYCenter < 0) {
+            if (distanceFromXCenter < 0 && distanceFromYCenter < 0) {
                 angle += Math.PI * 2;
             }
 
@@ -389,10 +389,10 @@
                 distance: radialDistanceFromCenter
             };
         },
-        aliasPixel = helpers.aliasPixel = function(pixelWidth) {
-            return(pixelWidth % 2 === 0) ? 0 : 0.5;
+        aliasPixel = helpers.aliasPixel = function (pixelWidth) {
+            return (pixelWidth % 2 === 0) ? 0 : 0.5;
         },
-        splineCurve = helpers.splineCurve = function(FirstPoint, MiddlePoint, AfterPoint, t) {
+        splineCurve = helpers.splineCurve = function (FirstPoint, MiddlePoint, AfterPoint, t) {
             //Props to Rob Spencer at scaled innovation for his post on splining between points
             //http://scaledinnovation.com/analytics/splines/aboutSplines.html
             var d01 = Math.sqrt(Math.pow(MiddlePoint.x - FirstPoint.x, 2) + Math.pow(MiddlePoint.y - FirstPoint.y, 2)),
@@ -410,10 +410,10 @@
                 }
             };
         },
-        calculateOrderOfMagnitude = helpers.calculateOrderOfMagnitude = function(val) {
+        calculateOrderOfMagnitude = helpers.calculateOrderOfMagnitude = function (val) {
             return Math.floor(Math.log(val) / Math.LN10);
         },
-        calculateScaleRange = helpers.calculateScaleRange = function(valuesArray, drawingSize, textSize, startFromZero, integersOnly) {
+        calculateScaleRange = helpers.calculateScaleRange = function (valuesArray, drawingSize, textSize, startFromZero, integersOnly) {
 
             //Set a minimum step of two - a point at the top of the graph, and a point at the base
             var minSteps = 2,
@@ -425,10 +425,10 @@
 
             // We need some degree of seperation here to calculate the scales if all the values are the same
             // Adding/minusing 0.5 will give us a range of 1.
-            if(maxValue === minValue) {
+            if (maxValue === minValue) {
                 maxValue += 0.5;
                 // So we don't end up with a graph with a negative start value if we've said always start from zero
-                if(minValue >= 0.5 && !startFromZero) {
+                if (minValue >= 0.5 && !startFromZero) {
                     minValue -= 0.5;
                 } else {
                     // Make up a whole number above the values
@@ -445,21 +445,21 @@
                 numberOfSteps = Math.round(graphRange / stepValue);
 
             //If we have more space on the graph we'll use it to give more definition to the data
-            while((numberOfSteps > maxSteps || (numberOfSteps * 2) < maxSteps) && !skipFitting) {
-                if(numberOfSteps > maxSteps) {
+            while ((numberOfSteps > maxSteps || (numberOfSteps * 2) < maxSteps) && !skipFitting) {
+                if (numberOfSteps > maxSteps) {
                     stepValue *= 2;
                     numberOfSteps = Math.round(graphRange / stepValue);
                     // Don't ever deal with a decimal number of steps - cancel fitting and just use the minimum number of steps.
-                    if(numberOfSteps % 1 !== 0) {
+                    if (numberOfSteps % 1 !== 0) {
                         skipFitting = true;
                     }
                 }
                 //We can fit in double the amount of scale points on the scale
                 else {
                     //If user has declared ints only, and the step value isn't a decimal
-                    if(integersOnly && rangeOrderOfMagnitude >= 0) {
+                    if (integersOnly && rangeOrderOfMagnitude >= 0) {
                         //If the user has said integers only, we need to check that making the scale more granular wouldn't make it a float
-                        if(stepValue / 2 % 1 === 0) {
+                        if (stepValue / 2 % 1 === 0) {
                             stepValue /= 2;
                             numberOfSteps = Math.round(graphRange / stepValue);
                         }
@@ -477,7 +477,7 @@
                 }
             }
 
-            if(skipFitting) {
+            if (skipFitting) {
                 numberOfSteps = minSteps;
                 stepValue = graphRange / numberOfSteps;
             }
@@ -494,11 +494,11 @@
         // Blows up jshint errors based on the new Function constructor
         //Templating methods
         //Javascript micro templating by John Resig - source at http://ejohn.org/blog/javascript-micro-templating/
-        template = helpers.template = function(templateString, valuesObject) {
+        template = helpers.template = function (templateString, valuesObject) {
 
             // If templateString is function rather than string-template - call the function for valuesObject
 
-            if(templateString instanceof Function) {
+            if (templateString instanceof Function) {
                 return templateString(valuesObject);
             }
 
@@ -520,13 +520,13 @@
 
                         // Convert the template into pure JavaScript
                         str
-                        .replace(/[\r\t\n]/g, " ")
-                        .split("<%").join("\t")
-                        .replace(/((^|%>)[^\t]*)'/g, "$1\r")
-                        .replace(/\t=(.*?)%>/g, "',$1,'")
-                        .split("\t").join("');")
-                        .split("%>").join("p.push('")
-                        .split("\r").join("\\'") +
+                            .replace(/[\r\t\n]/g, " ")
+                            .split("<%").join("\t")
+                            .replace(/((^|%>)[^\t]*)'/g, "$1\r")
+                            .replace(/\t=(.*?)%>/g, "',$1,'")
+                            .split("\t").join("');")
+                            .split("%>").join("p.push('")
+                            .split("\r").join("\\'") +
                         "');}return p.join('');"
                     );
 
@@ -536,10 +536,10 @@
             return tmpl(templateString, valuesObject);
         },
         /* jshint ignore:end */
-        generateLabels = helpers.generateLabels = function(templateString, numberOfSteps, graphMin, stepValue) {
+        generateLabels = helpers.generateLabels = function (templateString, numberOfSteps, graphMin, stepValue) {
             var labelsArray = new Array(numberOfSteps);
-            if(labelTemplateString) {
-                each(labelsArray, function(val, index) {
+            if (labelTemplateString) {
+                each(labelsArray, function (val, index) {
                     labelsArray[index] = template(templateString, {
                         value: (graphMin + (stepValue * (index + 1)))
                     });
@@ -551,187 +551,187 @@
         //Easing functions adapted from Robert Penner's easing equations
         //http://www.robertpenner.com/easing/
         easingEffects = helpers.easingEffects = {
-            linear: function(t) {
+            linear: function (t) {
                 return t;
             },
-            easeInQuad: function(t) {
+            easeInQuad: function (t) {
                 return t * t;
             },
-            easeOutQuad: function(t) {
+            easeOutQuad: function (t) {
                 return -1 * t * (t - 2);
             },
-            easeInOutQuad: function(t) {
-                if((t /= 1 / 2) < 1) return 1 / 2 * t * t;
+            easeInOutQuad: function (t) {
+                if ((t /= 1 / 2) < 1) return 1 / 2 * t * t;
                 return -1 / 2 * ((--t) * (t - 2) - 1);
             },
-            easeInCubic: function(t) {
+            easeInCubic: function (t) {
                 return t * t * t;
             },
-            easeOutCubic: function(t) {
+            easeOutCubic: function (t) {
                 return 1 * ((t = t / 1 - 1) * t * t + 1);
             },
-            easeInOutCubic: function(t) {
-                if((t /= 1 / 2) < 1) return 1 / 2 * t * t * t;
+            easeInOutCubic: function (t) {
+                if ((t /= 1 / 2) < 1) return 1 / 2 * t * t * t;
                 return 1 / 2 * ((t -= 2) * t * t + 2);
             },
-            easeInQuart: function(t) {
+            easeInQuart: function (t) {
                 return t * t * t * t;
             },
-            easeOutQuart: function(t) {
+            easeOutQuart: function (t) {
                 return -1 * ((t = t / 1 - 1) * t * t * t - 1);
             },
-            easeInOutQuart: function(t) {
-                if((t /= 1 / 2) < 1) return 1 / 2 * t * t * t * t;
+            easeInOutQuart: function (t) {
+                if ((t /= 1 / 2) < 1) return 1 / 2 * t * t * t * t;
                 return -1 / 2 * ((t -= 2) * t * t * t - 2);
             },
-            easeInQuint: function(t) {
+            easeInQuint: function (t) {
                 return 1 * (t /= 1) * t * t * t * t;
             },
-            easeOutQuint: function(t) {
+            easeOutQuint: function (t) {
                 return 1 * ((t = t / 1 - 1) * t * t * t * t + 1);
             },
-            easeInOutQuint: function(t) {
-                if((t /= 1 / 2) < 1) return 1 / 2 * t * t * t * t * t;
+            easeInOutQuint: function (t) {
+                if ((t /= 1 / 2) < 1) return 1 / 2 * t * t * t * t * t;
                 return 1 / 2 * ((t -= 2) * t * t * t * t + 2);
             },
-            easeInSine: function(t) {
+            easeInSine: function (t) {
                 return -1 * Math.cos(t / 1 * (Math.PI / 2)) + 1;
             },
-            easeOutSine: function(t) {
+            easeOutSine: function (t) {
                 return 1 * Math.sin(t / 1 * (Math.PI / 2));
             },
-            easeInOutSine: function(t) {
+            easeInOutSine: function (t) {
                 return -1 / 2 * (Math.cos(Math.PI * t / 1) - 1);
             },
-            easeInExpo: function(t) {
-                return(t === 0) ? 1 : 1 * Math.pow(2, 10 * (t / 1 - 1));
+            easeInExpo: function (t) {
+                return (t === 0) ? 1 : 1 * Math.pow(2, 10 * (t / 1 - 1));
             },
-            easeOutExpo: function(t) {
-                return(t === 1) ? 1 : 1 * (-Math.pow(2, -10 * t / 1) + 1);
+            easeOutExpo: function (t) {
+                return (t === 1) ? 1 : 1 * (-Math.pow(2, -10 * t / 1) + 1);
             },
-            easeInOutExpo: function(t) {
-                if(t === 0) return 0;
-                if(t === 1) return 1;
-                if((t /= 1 / 2) < 1) return 1 / 2 * Math.pow(2, 10 * (t - 1));
+            easeInOutExpo: function (t) {
+                if (t === 0) return 0;
+                if (t === 1) return 1;
+                if ((t /= 1 / 2) < 1) return 1 / 2 * Math.pow(2, 10 * (t - 1));
                 return 1 / 2 * (-Math.pow(2, -10 * --t) + 2);
             },
-            easeInCirc: function(t) {
-                if(t >= 1) return t;
+            easeInCirc: function (t) {
+                if (t >= 1) return t;
                 return -1 * (Math.sqrt(1 - (t /= 1) * t) - 1);
             },
-            easeOutCirc: function(t) {
+            easeOutCirc: function (t) {
                 return 1 * Math.sqrt(1 - (t = t / 1 - 1) * t);
             },
-            easeInOutCirc: function(t) {
-                if((t /= 1 / 2) < 1) return -1 / 2 * (Math.sqrt(1 - t * t) - 1);
+            easeInOutCirc: function (t) {
+                if ((t /= 1 / 2) < 1) return -1 / 2 * (Math.sqrt(1 - t * t) - 1);
                 return 1 / 2 * (Math.sqrt(1 - (t -= 2) * t) + 1);
             },
-            easeInElastic: function(t) {
+            easeInElastic: function (t) {
                 var s = 1.70158;
                 var p = 0;
                 var a = 1;
-                if(t === 0) return 0;
-                if((t /= 1) == 1) return 1;
-                if(!p) p = 1 * 0.3;
-                if(a < Math.abs(1)) {
+                if (t === 0) return 0;
+                if ((t /= 1) == 1) return 1;
+                if (!p) p = 1 * 0.3;
+                if (a < Math.abs(1)) {
                     a = 1;
                     s = p / 4;
                 } else s = p / (2 * Math.PI) * Math.asin(1 / a);
                 return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * 1 - s) * (2 * Math.PI) / p));
             },
-            easeOutElastic: function(t) {
+            easeOutElastic: function (t) {
                 var s = 1.70158;
                 var p = 0;
                 var a = 1;
-                if(t === 0) return 0;
-                if((t /= 1) == 1) return 1;
-                if(!p) p = 1 * 0.3;
-                if(a < Math.abs(1)) {
+                if (t === 0) return 0;
+                if ((t /= 1) == 1) return 1;
+                if (!p) p = 1 * 0.3;
+                if (a < Math.abs(1)) {
                     a = 1;
                     s = p / 4;
                 } else s = p / (2 * Math.PI) * Math.asin(1 / a);
                 return a * Math.pow(2, -10 * t) * Math.sin((t * 1 - s) * (2 * Math.PI) / p) + 1;
             },
-            easeInOutElastic: function(t) {
+            easeInOutElastic: function (t) {
                 var s = 1.70158;
                 var p = 0;
                 var a = 1;
-                if(t === 0) return 0;
-                if((t /= 1 / 2) == 2) return 1;
-                if(!p) p = 1 * (0.3 * 1.5);
-                if(a < Math.abs(1)) {
+                if (t === 0) return 0;
+                if ((t /= 1 / 2) == 2) return 1;
+                if (!p) p = 1 * (0.3 * 1.5);
+                if (a < Math.abs(1)) {
                     a = 1;
                     s = p / 4;
                 } else s = p / (2 * Math.PI) * Math.asin(1 / a);
-                if(t < 1) return -0.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * 1 - s) * (2 * Math.PI) / p));
+                if (t < 1) return -0.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * 1 - s) * (2 * Math.PI) / p));
                 return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * 1 - s) * (2 * Math.PI) / p) * 0.5 + 1;
             },
-            easeInBack: function(t) {
+            easeInBack: function (t) {
                 var s = 1.70158;
                 return 1 * (t /= 1) * t * ((s + 1) * t - s);
             },
-            easeOutBack: function(t) {
+            easeOutBack: function (t) {
                 var s = 1.70158;
                 return 1 * ((t = t / 1 - 1) * t * ((s + 1) * t + s) + 1);
             },
-            easeInOutBack: function(t) {
+            easeInOutBack: function (t) {
                 var s = 1.70158;
-                if((t /= 1 / 2) < 1) return 1 / 2 * (t * t * (((s *= (1.525)) + 1) * t - s));
+                if ((t /= 1 / 2) < 1) return 1 / 2 * (t * t * (((s *= (1.525)) + 1) * t - s));
                 return 1 / 2 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2);
             },
-            easeInBounce: function(t) {
+            easeInBounce: function (t) {
                 return 1 - easingEffects.easeOutBounce(1 - t);
             },
-            easeOutBounce: function(t) {
-                if((t /= 1) < (1 / 2.75)) {
+            easeOutBounce: function (t) {
+                if ((t /= 1) < (1 / 2.75)) {
                     return 1 * (7.5625 * t * t);
-                } else if(t < (2 / 2.75)) {
+                } else if (t < (2 / 2.75)) {
                     return 1 * (7.5625 * (t -= (1.5 / 2.75)) * t + 0.75);
-                } else if(t < (2.5 / 2.75)) {
+                } else if (t < (2.5 / 2.75)) {
                     return 1 * (7.5625 * (t -= (2.25 / 2.75)) * t + 0.9375);
                 } else {
                     return 1 * (7.5625 * (t -= (2.625 / 2.75)) * t + 0.984375);
                 }
             },
-            easeInOutBounce: function(t) {
-                if(t < 1 / 2) return easingEffects.easeInBounce(t * 2) * 0.5;
+            easeInOutBounce: function (t) {
+                if (t < 1 / 2) return easingEffects.easeInBounce(t * 2) * 0.5;
                 return easingEffects.easeOutBounce(t * 2 - 1) * 0.5 + 1 * 0.5;
             }
         },
         //Request animation polyfill - http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
-        requestAnimFrame = helpers.requestAnimFrame = (function() {
+        requestAnimFrame = helpers.requestAnimFrame = (function () {
             return window.requestAnimationFrame ||
                 window.webkitRequestAnimationFrame ||
                 window.mozRequestAnimationFrame ||
                 window.oRequestAnimationFrame ||
                 window.msRequestAnimationFrame ||
-                function(callback) {
+                function (callback) {
                     return window.setTimeout(callback, 1000 / 60);
                 };
         })(),
-        cancelAnimFrame = helpers.cancelAnimFrame = (function() {
+        cancelAnimFrame = helpers.cancelAnimFrame = (function () {
             return window.cancelAnimationFrame ||
                 window.webkitCancelAnimationFrame ||
                 window.mozCancelAnimationFrame ||
                 window.oCancelAnimationFrame ||
                 window.msCancelAnimationFrame ||
-                function(callback) {
+                function (callback) {
                     return window.clearTimeout(callback, 1000 / 60);
                 };
         })(),
-        animationLoop = helpers.animationLoop = function(callback, totalSteps, easingString, onProgress, onComplete, chartInstance) {
+        animationLoop = helpers.animationLoop = function (callback, totalSteps, easingString, onProgress, onComplete, chartInstance) {
 
             var currentStep = 0,
                 easingFunction = easingEffects[easingString] || easingEffects.linear;
 
-            var animationFrame = function() {
+            var animationFrame = function () {
                 currentStep++;
                 var stepDecimal = currentStep / totalSteps;
                 var easeDecimal = easingFunction(stepDecimal);
 
                 callback.call(chartInstance, easeDecimal, stepDecimal, currentStep);
                 onProgress.call(chartInstance, easeDecimal, stepDecimal);
-                if(currentStep < totalSteps) {
+                if (currentStep < totalSteps) {
                     chartInstance.animationFrame = requestAnimFrame(animationFrame);
                 } else {
                     onComplete.apply(chartInstance);
@@ -740,13 +740,13 @@
             requestAnimFrame(animationFrame);
         },
         //-- DOM methods
-        getRelativePosition = helpers.getRelativePosition = function(evt) {
+        getRelativePosition = helpers.getRelativePosition = function (evt) {
             var mouseX, mouseY;
             var e = evt.originalEvent || evt,
                 canvas = evt.currentTarget || evt.srcElement,
                 boundingRect = canvas.getBoundingClientRect();
 
-            if(e.touches) {
+            if (e.touches) {
                 mouseX = e.touches[0].clientX - boundingRect.left;
                 mouseY = e.touches[0].clientY - boundingRect.top;
 
@@ -761,57 +761,57 @@
             };
 
         },
-        addEvent = helpers.addEvent = function(node, eventType, method) {
-            if(node.addEventListener) {
+        addEvent = helpers.addEvent = function (node, eventType, method) {
+            if (node.addEventListener) {
                 node.addEventListener(eventType, method);
-            } else if(node.attachEvent) {
+            } else if (node.attachEvent) {
                 node.attachEvent("on" + eventType, method);
             } else {
                 node["on" + eventType] = method;
             }
         },
-        removeEvent = helpers.removeEvent = function(node, eventType, handler) {
-            if(node.removeEventListener) {
+        removeEvent = helpers.removeEvent = function (node, eventType, handler) {
+            if (node.removeEventListener) {
                 node.removeEventListener(eventType, handler, false);
-            } else if(node.detachEvent) {
+            } else if (node.detachEvent) {
                 node.detachEvent("on" + eventType, handler);
             } else {
                 node["on" + eventType] = noop;
             }
         },
-        bindEvents = helpers.bindEvents = function(chartInstance, arrayOfEvents, handler) {
+        bindEvents = helpers.bindEvents = function (chartInstance, arrayOfEvents, handler) {
             // Create the events object if it's not already present
-            if(!chartInstance.events) chartInstance.events = {};
+            if (!chartInstance.events) chartInstance.events = {};
 
-            each(arrayOfEvents, function(eventName) {
-                chartInstance.events[eventName] = function() {
+            each(arrayOfEvents, function (eventName) {
+                chartInstance.events[eventName] = function () {
                     handler.apply(chartInstance, arguments);
                 };
                 addEvent(chartInstance.chart.canvas, eventName, chartInstance.events[eventName]);
             });
         },
-        unbindEvents = helpers.unbindEvents = function(chartInstance, arrayOfEvents) {
-            each(arrayOfEvents, function(handler, eventName) {
+        unbindEvents = helpers.unbindEvents = function (chartInstance, arrayOfEvents) {
+            each(arrayOfEvents, function (handler, eventName) {
                 removeEvent(chartInstance.chart.canvas, eventName, handler);
             });
         },
-        getMaximumWidth = helpers.getMaximumWidth = function(domNode) {
+        getMaximumWidth = helpers.getMaximumWidth = function (domNode) {
             var container = domNode.parentNode;
             // TODO = check cross browser stuff with this.
             return container.clientWidth;
         },
-        getMaximumHeight = helpers.getMaximumHeight = function(domNode) {
+        getMaximumHeight = helpers.getMaximumHeight = function (domNode) {
             var container = domNode.parentNode;
             // TODO = check cross browser stuff with this.
             return container.clientHeight;
         },
         getMaximumSize = helpers.getMaximumSize = helpers.getMaximumWidth, // legacy support
-        retinaScale = helpers.retinaScale = function(chart) {
+        retinaScale = helpers.retinaScale = function (chart) {
             var ctx = chart.ctx,
                 width = chart.canvas.width,
                 height = chart.canvas.height;
 
-            if(window.devicePixelRatio) {
+            if (window.devicePixelRatio) {
                 ctx.canvas.style.width = width + "px";
                 ctx.canvas.style.height = height + "px";
                 ctx.canvas.height = height * window.devicePixelRatio;
@@ -820,22 +820,22 @@
             }
         },
         //-- Canvas methods
-        clear = helpers.clear = function(chart) {
+        clear = helpers.clear = function (chart) {
             chart.ctx.clearRect(0, 0, chart.width, chart.height);
         },
-        fontString = helpers.fontString = function(pixelSize, fontStyle, fontFamily) {
+        fontString = helpers.fontString = function (pixelSize, fontStyle, fontFamily) {
             return fontStyle + " " + pixelSize + "px " + fontFamily;
         },
-        longestText = helpers.longestText = function(ctx, font, arrayOfStrings) {
+        longestText = helpers.longestText = function (ctx, font, arrayOfStrings) {
             ctx.font = font;
             var longest = 0;
-            each(arrayOfStrings, function(string) {
+            each(arrayOfStrings, function (string) {
                 var textWidth = ctx.measureText(string).width;
                 longest = (textWidth > longest) ? textWidth : longest;
             });
             return longest;
         },
-        drawRoundedRectangle = helpers.drawRoundedRectangle = function(ctx, x, y, width, height, radius) {
+        drawRoundedRectangle = helpers.drawRoundedRectangle = function (ctx, x, y, width, height, radius) {
             ctx.beginPath();
             ctx.moveTo(x + radius, y);
             ctx.lineTo(x + width - radius, y);
@@ -855,7 +855,7 @@
     //Destroy method on the chart will remove the instance of the chart from this reference.
     Chart.instances = {};
 
-    Chart.Type = function(data, options, chart) {
+    Chart.Type = function (data, options, chart) {
         this.options = options;
         this.chart = chart;
         this.id = uid();
@@ -864,7 +864,7 @@
 
         // Initialize is always called when a chart type is created
         // By default it is a no op, but it should be extended
-        if(options.responsive) {
+        if (options.responsive) {
             this.resize();
         }
         this.initialize.call(this, data);
@@ -872,19 +872,19 @@
 
     //Core methods that'll be a part of every chart type
     extend(Chart.Type.prototype, {
-        initialize: function() {
+        initialize: function () {
             return this;
         },
-        clear: function() {
+        clear: function () {
             clear(this.chart);
             return this;
         },
-        stop: function() {
+        stop: function () {
             // Stops any current animation loop occuring
             cancelAnimFrame(this.animationFrame);
             return this;
         },
-        resize: function(callback) {
+        resize: function (callback) {
             this.stop();
             var canvas = this.chart.canvas,
                 newWidth = getMaximumWidth(this.chart.canvas),
@@ -895,17 +895,17 @@
 
             retinaScale(this.chart);
 
-            if(typeof callback === "function") {
+            if (typeof callback === "function") {
                 callback.apply(this, Array.prototype.slice.call(arguments, 1));
             }
             return this;
         },
         reflow: noop,
-        render: function(reflow) {
-            if(reflow) {
+        render: function (reflow) {
+            if (reflow) {
                 this.reflow();
             }
-            if(this.options.animation && !reflow) {
+            if (this.options.animation && !reflow) {
                 helpers.animationLoop(
                     this.draw,
                     this.options.animationSteps,
@@ -920,10 +920,10 @@
             }
             return this;
         },
-        generateLegend: function() {
+        generateLegend: function () {
             return template(this.options.legendTemplate, this);
         },
-        destroy: function() {
+        destroy: function () {
             this.clear();
             unbindEvents(this, this.events);
             var canvas = this.chart.canvas;
@@ -933,7 +933,7 @@
             canvas.height = this.chart.height;
 
             // < IE9 doesn't support removeProperty
-            if(canvas.style.removeProperty) {
+            if (canvas.style.removeProperty) {
                 canvas.style.removeProperty('width');
                 canvas.style.removeProperty('height');
             } else {
@@ -943,51 +943,51 @@
 
             delete Chart.instances[this.id];
         },
-        showTooltip: function(ChartElements, forceRedraw) {
+        showTooltip: function (ChartElements, forceRedraw) {
             // Only redraw the chart if we've actually changed what we're hovering on.
-            if(typeof this.activeElements === 'undefined') this.activeElements = [];
+            if (typeof this.activeElements === 'undefined') this.activeElements = [];
 
-            var isChanged = (function(Elements) {
+            var isChanged = (function (Elements) {
                 var changed = false;
 
-                if(Elements.length !== this.activeElements.length) {
+                if (Elements.length !== this.activeElements.length) {
                     changed = true;
                     return changed;
                 }
 
-                each(Elements, function(element, index) {
-                    if(element !== this.activeElements[index]) {
+                each(Elements, function (element, index) {
+                    if (element !== this.activeElements[index]) {
                         changed = true;
                     }
                 }, this);
                 return changed;
             }).call(this, ChartElements);
 
-            if(!isChanged && !forceRedraw) {
+            if (!isChanged && !forceRedraw) {
                 return;
             } else {
                 this.activeElements = ChartElements;
             }
             this.draw();
-            if(this.options.customTooltips) {
+            if (this.options.customTooltips) {
                 this.options.customTooltips(false);
             }
-            if(ChartElements.length > 0) {
+            if (ChartElements.length > 0) {
                 // If we have multiple datasets, show a MultiTooltip for all of the data points at that index
-                if(this.datasets && this.datasets.length > 1) {
+                if (this.datasets && this.datasets.length > 1) {
                     var dataArray,
                         dataIndex;
 
-                    for(var i = this.datasets.length - 1; i >= 0; i--) {
+                    for (var i = this.datasets.length - 1; i >= 0; i--) {
                         dataArray = this.datasets[i].points || this.datasets[i].bars || this.datasets[i].segments;
                         dataIndex = indexOf(dataArray, ChartElements[0]);
-                        if(dataIndex !== -1) {
+                        if (dataIndex !== -1) {
                             break;
                         }
                     }
                     var tooltipLabels = [],
                         tooltipColors = [],
-                        medianPosition = (function(index) {
+                        medianPosition = (function (index) {
 
                             // Get all the points at that particular index
                             var Elements = [],
@@ -998,17 +998,17 @@
                                 yMax,
                                 xMin,
                                 yMin;
-                            helpers.each(this.datasets, function(dataset) {
+                            helpers.each(this.datasets, function (dataset) {
                                 /// ZUI change begin
-                                if(dataset.showTooltips === false) return;
+                                if (dataset.showTooltips === false) return;
                                 /// ZUI change end
                                 dataCollection = dataset.points || dataset.bars || dataset.segments;
-                                if(dataCollection[dataIndex] && dataCollection[dataIndex].hasValue()) {
+                                if (dataCollection[dataIndex] && dataCollection[dataIndex].hasValue()) {
                                     Elements.push(dataCollection[dataIndex]);
                                 }
                             });
 
-                            helpers.each(Elements, function(element) {
+                            helpers.each(Elements, function (element) {
                                 xPositions.push(element.x);
                                 yPositions.push(element.y);
 
@@ -1060,7 +1060,7 @@
                     }).draw();
 
                 } else {
-                    each(ChartElements, function(Element) {
+                    each(ChartElements, function (Element) {
                         var tooltipPosition = Element.tooltipPosition();
                         new Chart.Tooltip({
                             x: Math.round(tooltipPosition.x),
@@ -1083,16 +1083,16 @@
             }
             return this;
         },
-        toBase64Image: function() {
+        toBase64Image: function () {
             return this.chart.canvas.toDataURL.apply(this.chart.canvas, arguments);
         }
     });
 
-    Chart.Type.extend = function(extensions) {
+    Chart.Type.extend = function (extensions) {
 
         var parent = this;
 
-        var ChartType = function() {
+        var ChartType = function () {
             return parent.apply(this, arguments);
         };
 
@@ -1103,7 +1103,7 @@
 
         ChartType.extend = Chart.Type.extend;
 
-        if(extensions.name || parent.prototype.name) {
+        if (extensions.name || parent.prototype.name) {
 
             var chartName = extensions.name || parent.prototype.name;
             //Assign any potential default values of the new chart type
@@ -1119,7 +1119,7 @@
             Chart.types[chartName] = ChartType;
 
             //Register this new chart type in the Chart prototype
-            Chart.prototype[chartName] = function(data, options) {
+            Chart.prototype[chartName] = function (data, options) {
                 var config = merge(Chart.defaults.global, Chart.defaults[chartName], options || {});
                 return new ChartType(data, config, this);
             };
@@ -1129,48 +1129,48 @@
         return parent;
     };
 
-    Chart.Element = function(configuration) {
+    Chart.Element = function (configuration) {
         extend(this, configuration);
         this.initialize.apply(this, arguments);
         this.save();
     };
     extend(Chart.Element.prototype, {
-        initialize: function() {},
-        restore: function(props) {
-            if(!props) {
+        initialize: function () { },
+        restore: function (props) {
+            if (!props) {
                 extend(this, this._saved);
             } else {
-                each(props, function(key) {
+                each(props, function (key) {
                     this[key] = this._saved[key];
                 }, this);
             }
             return this;
         },
-        save: function() {
+        save: function () {
             this._saved = clone(this);
             delete this._saved._saved;
             return this;
         },
-        update: function(newProps) {
-            each(newProps, function(value, key) {
+        update: function (newProps) {
+            each(newProps, function (value, key) {
                 this._saved[key] = this[key];
                 this[key] = value;
             }, this);
             return this;
         },
-        transition: function(props, ease) {
-            each(props, function(value, key) {
+        transition: function (props, ease) {
+            each(props, function (value, key) {
                 this[key] = ((value - this._saved[key]) * ease) + this._saved[key];
             }, this);
             return this;
         },
-        tooltipPosition: function() {
+        tooltipPosition: function () {
             return {
                 x: this.x,
                 y: this.y
             };
         },
-        hasValue: function() {
+        hasValue: function () {
             return isNumber(this.value);
         }
     });
@@ -1180,12 +1180,12 @@
 
     Chart.Point = Chart.Element.extend({
         display: true,
-        inRange: function(chartX, chartY) {
+        inRange: function (chartX, chartY) {
             var hitDetectionRange = this.hitDetectionRadius + this.radius;
-            return((Math.pow(chartX - this.x, 2) + Math.pow(chartY - this.y, 2)) < Math.pow(hitDetectionRange, 2));
+            return ((Math.pow(chartX - this.x, 2) + Math.pow(chartY - this.y, 2)) < Math.pow(hitDetectionRange, 2));
         },
-        draw: function() {
-            if(this.display) {
+        draw: function () {
+            if (this.display) {
                 var ctx = this.ctx;
                 ctx.beginPath();
 
@@ -1230,7 +1230,7 @@
     });
 
     Chart.Arc = Chart.Element.extend({
-        inRange: function(chartX, chartY) {
+        inRange: function (chartX, chartY) {
 
             var pointRelativePosition = helpers.getAngleFromPoint(this, {
                 x: chartX,
@@ -1241,10 +1241,10 @@
             var betweenAngles = (pointRelativePosition.angle >= this.startAngle && pointRelativePosition.angle <= this.endAngle),
                 withinRadius = (pointRelativePosition.distance >= this.innerRadius && pointRelativePosition.distance <= this.outerRadius);
 
-            return(betweenAngles && withinRadius);
+            return (betweenAngles && withinRadius);
             //Ensure within the outside of the arc centre, but inside arc outer
         },
-        tooltipPosition: function() {
+        tooltipPosition: function () {
             var centreAngle = this.startAngle + ((this.endAngle - this.startAngle) / 2),
                 rangeFromCentre = (this.outerRadius - this.innerRadius) / 2 + this.innerRadius;
             return {
@@ -1252,7 +1252,7 @@
                 y: this.y + (Math.sin(centreAngle) * rangeFromCentre)
             };
         },
-        draw: function(animationPercent) {
+        draw: function (animationPercent) {
 
             var easingDecimal = animationPercent || 1;
 
@@ -1273,14 +1273,14 @@
             ctx.fill();
             ctx.lineJoin = 'bevel';
 
-            if(this.showStroke) {
+            if (this.showStroke) {
                 ctx.stroke();
             }
         }
     });
 
     Chart.Rectangle = Chart.Element.extend({
-        draw: function() {
+        draw: function () {
             var ctx = this.ctx,
                 halfWidth = this.width / 2,
                 leftX = this.x - halfWidth,
@@ -1290,7 +1290,7 @@
 
             // Canvas doesn't allow us to stroke inside the width so we can
             // adjust the sizes to fit if we're setting a stroke on the line
-            if(this.showStroke) {
+            if (this.showStroke) {
                 leftX += halfStroke;
                 rightX -= halfStroke;
                 top += halfStroke;
@@ -1309,20 +1309,20 @@
             ctx.lineTo(rightX, top);
             ctx.lineTo(rightX, this.base);
             ctx.fill();
-            if(this.showStroke) {
+            if (this.showStroke) {
                 ctx.stroke();
             }
         },
-        height: function() {
+        height: function () {
             return this.base - this.y;
         },
-        inRange: function(chartX, chartY) {
-            return(chartX >= this.x - this.width / 2 && chartX <= this.x + this.width / 2) && (chartY >= this.y && chartY <= this.base);
+        inRange: function (chartX, chartY) {
+            return (chartX >= this.x - this.width / 2 && chartX <= this.x + this.width / 2) && (chartY >= this.y && chartY <= this.base);
         }
     });
 
     Chart.Tooltip = Chart.Element.extend({
-        draw: function() {
+        draw: function () {
 
             var ctx = this.chart.ctx;
 
@@ -1338,13 +1338,13 @@
                 tooltipRectHeight = this.fontSize + 2 * this.yPadding,
                 tooltipHeight = tooltipRectHeight + this.caretHeight + caretPadding;
 
-            if(this.x + tooltipWidth / 2 > this.chart.width) {
+            if (this.x + tooltipWidth / 2 > this.chart.width) {
                 this.xAlign = "left";
-            } else if(this.x - tooltipWidth / 2 < 0) {
+            } else if (this.x - tooltipWidth / 2 < 0) {
                 this.xAlign = "right";
             }
 
-            if(this.y - tooltipHeight < 0) {
+            if (this.y - tooltipHeight < 0) {
                 this.yAlign = "below";
             }
 
@@ -1355,10 +1355,10 @@
             ctx.fillStyle = this.fillColor;
 
             // Custom Tooltips
-            if(this.custom) {
+            if (this.custom) {
                 this.custom(this);
             } else {
-                switch(this.yAlign) {
+                switch (this.yAlign) {
                     case "above":
                         //Draw a caret above the x/y
                         ctx.beginPath();
@@ -1380,7 +1380,7 @@
                         break;
                 }
 
-                switch(this.xAlign) {
+                switch (this.xAlign) {
                     case "left":
                         tooltipX = this.x - tooltipWidth + (this.cornerRadius + this.caretHeight);
                         break;
@@ -1402,7 +1402,7 @@
     });
 
     Chart.MultiTooltip = Chart.Element.extend({
-        initialize: function() {
+        initialize: function () {
             this.font = fontString(this.fontSize, this.fontStyle, this.fontFamily);
 
             this.titleFont = fontString(this.titleFontSize, this.titleFontStyle, this.titleFontFamily);
@@ -1422,14 +1422,14 @@
             var halfHeight = this.height / 2;
 
             //Check to ensure the height will fit on the canvas
-            if(this.y - halfHeight < 0) {
+            if (this.y - halfHeight < 0) {
                 this.y = halfHeight;
-            } else if(this.y + halfHeight > this.chart.height) {
+            } else if (this.y + halfHeight > this.chart.height) {
                 this.y = this.chart.height - halfHeight;
             }
 
             //Decide whether to align left or right based on position on canvas
-            if(this.x > this.chart.width / 2) {
+            if (this.x > this.chart.width / 2) {
                 this.x -= this.xOffset + this.width;
             } else {
                 this.x += this.xOffset;
@@ -1437,21 +1437,21 @@
 
 
         },
-        getLineHeight: function(index) {
+        getLineHeight: function (index) {
             var baseLineHeight = this.y - (this.height / 2) + this.yPadding,
                 afterTitleIndex = index - 1;
 
             //If the index is zero, we're getting the title
-            if(index === 0) {
+            if (index === 0) {
                 return baseLineHeight + this.titleFontSize / 2;
             } else {
                 return baseLineHeight + ((this.fontSize * 1.5 * afterTitleIndex) + this.fontSize / 2) + this.titleFontSize * 1.5;
             }
 
         },
-        draw: function() {
+        draw: function () {
             // Custom Tooltips
-            if(this.custom) {
+            if (this.custom) {
                 this.custom(this);
             } else {
                 drawRoundedRectangle(this.ctx, this.x, this.y - this.height / 2, this.width, this.height, this.cornerRadius);
@@ -1468,7 +1468,7 @@
                 ctx.fillText(this.title, this.x + this.xPadding, this.getLineHeight(0));
 
                 ctx.font = this.font;
-                helpers.each(this.labels, function(label, index) {
+                helpers.each(this.labels, function (label, index) {
                     ctx.fillStyle = this.textColor;
                     ctx.fillText(label, this.x + this.xPadding + this.fontSize + 3, this.getLineHeight(index + 1));
 
@@ -1489,33 +1489,33 @@
     });
 
     Chart.Scale = Chart.Element.extend({
-        initialize: function() {
+        initialize: function () {
             this.fit();
         },
-        buildYLabels: function() {
+        buildYLabels: function () {
             this.yLabels = [];
 
             var stepDecimalPlaces = getDecimalPlaces(this.stepValue);
 
-            for(var i = 0; i <= this.steps; i++) {
+            for (var i = 0; i <= this.steps; i++) {
                 this.yLabels.push(template(this.templateString, {
                     value: (this.min + (i * this.stepValue)).toFixed(stepDecimalPlaces)
                 }));
             }
             this.yLabelWidth = (this.display && this.showLabels) ? longestText(this.ctx, this.font, this.yLabels) : 0;
         },
-        addXLabel: function(label) {
+        addXLabel: function (label) {
             this.xLabels.push(label);
             this.valuesCount++;
             this.fit();
         },
-        removeXLabel: function() {
+        removeXLabel: function () {
             this.xLabels.shift();
             this.valuesCount--;
             this.fit();
         },
         // Fitting loop to rotate x Labels and figure out what fits there, and also calculate how many Y steps to use
-        fit: function() {
+        fit: function () {
             // First we need the width of the yLabels, assuming the xLabels aren't rotated
 
             // To do that we need the base line at the top and base of the chart, assuming there is no x label rotation
@@ -1548,7 +1548,7 @@
 
             this.calculateXLabelRotation();
 
-            while((cachedHeight > this.endPoint - this.startPoint)) {
+            while ((cachedHeight > this.endPoint - this.startPoint)) {
                 cachedHeight = this.endPoint - this.startPoint;
                 cachedYLabelWidth = this.yLabelWidth;
 
@@ -1556,13 +1556,13 @@
                 this.buildYLabels();
 
                 // Only go through the xLabel loop again if the yLabel width has changed
-                if(cachedYLabelWidth < this.yLabelWidth) {
+                if (cachedYLabelWidth < this.yLabelWidth) {
                     this.calculateXLabelRotation();
                 }
             }
 
         },
-        calculateXLabelRotation: function() {
+        calculateXLabelRotation: function () {
             //Get the width of each grid by calculating the difference
             //between x offsets between 0 and 1.
 
@@ -1578,7 +1578,7 @@
             this.xScalePaddingLeft = (firstWidth / 2 > this.yLabelWidth + 10) ? firstWidth / 2 : this.yLabelWidth + 10;
 
             this.xLabelRotation = 0;
-            if(this.display) {
+            if (this.display) {
                 var originalLabelWidth = longestText(this.ctx, this.font, this.xLabels),
                     cosRotation,
                     firstRotatedWidth;
@@ -1587,14 +1587,14 @@
                 var xGridWidth = Math.floor(this.calculateX(1) - this.calculateX(0)) - 6;
 
                 //Max label rotate should be 90 - also act as a loop counter
-                while((this.xLabelWidth > xGridWidth && this.xLabelRotation === 0) || (this.xLabelWidth > xGridWidth && this.xLabelRotation <= 90 && this.xLabelRotation > 0)) {
+                while ((this.xLabelWidth > xGridWidth && this.xLabelRotation === 0) || (this.xLabelWidth > xGridWidth && this.xLabelRotation <= 90 && this.xLabelRotation > 0)) {
                     cosRotation = Math.cos(toRadians(this.xLabelRotation));
 
                     firstRotated = cosRotation * firstWidth;
                     lastRotated = cosRotation * lastWidth;
 
                     // We're right aligning the text now.
-                    if(firstRotated + this.fontSize / 2 > this.yLabelWidth + 8) {
+                    if (firstRotated + this.fontSize / 2 > this.yLabelWidth + 8) {
                         this.xScalePaddingLeft = firstRotated + this.fontSize / 2;
                     }
                     this.xScalePaddingRight = this.fontSize / 2;
@@ -1604,7 +1604,7 @@
                     this.xLabelWidth = cosRotation * originalLabelWidth;
 
                 }
-                if(this.xLabelRotation > 0) {
+                if (this.xLabelRotation > 0) {
                     this.endPoint -= Math.sin(toRadians(this.xLabelRotation)) * originalLabelWidth + 3;
                 }
             } else {
@@ -1617,59 +1617,59 @@
         // Needs to be overidden in each Chart type
         // Otherwise we need to pass all the data into the scale class
         calculateYRange: noop,
-        drawingArea: function() {
+        drawingArea: function () {
             return this.startPoint - this.endPoint;
         },
-        calculateY: function(value) {
+        calculateY: function (value) {
             var scalingFactor = this.drawingArea() / (this.min - this.max);
             return this.endPoint - (scalingFactor * (value - this.min));
         },
-        calculateX: function(index) {
+        calculateX: function (index) {
             var isRotated = (this.xLabelRotation > 0),
                 // innerWidth = (this.offsetGridLines) ? this.width - offsetLeft - this.padding : this.width - (offsetLeft + halfLabelWidth * 2) - this.padding,
                 innerWidth = this.width - (this.xScalePaddingLeft + this.xScalePaddingRight),
                 valueWidth = innerWidth / Math.max((this.valuesCount - ((this.offsetGridLines) ? 0 : 1)), 1),
                 valueOffset = (valueWidth * index) + this.xScalePaddingLeft;
 
-            if(this.offsetGridLines) {
+            if (this.offsetGridLines) {
                 valueOffset += (valueWidth / 2);
             }
 
             return Math.round(valueOffset);
         },
-        update: function(newProps) {
+        update: function (newProps) {
             helpers.extend(this, newProps);
             this.fit();
         },
-        draw: function() {
+        draw: function () {
             var ctx = this.ctx,
                 yLabelGap = (this.endPoint - this.startPoint) / this.steps,
                 xStart = Math.round(this.xScalePaddingLeft);
-            if(this.display) {
+            if (this.display) {
                 ctx.fillStyle = this.textColor;
                 ctx.font = this.font;
                 var beyondLineLength = this.showBeyondLine ? 5 : 0;
-                each(this.yLabels, function(labelString, index) {
+                each(this.yLabels, function (labelString, index) {
                     var yLabelCenter = this.endPoint - (yLabelGap * index),
                         linePositionY = Math.round(yLabelCenter),
                         drawHorizontalLine = this.showHorizontalLines;
 
                     ctx.textAlign = "right";
                     ctx.textBaseline = "middle";
-                    if(this.showLabels) {
+                    if (this.showLabels) {
                         ctx.fillText(labelString, xStart - 10, yLabelCenter);
                     }
 
                     // This is X axis, so draw it
-                    if(index === 0 && !drawHorizontalLine) {
+                    if (index === 0 && !drawHorizontalLine) {
                         drawHorizontalLine = true;
                     }
 
-                    if(drawHorizontalLine) {
+                    if (drawHorizontalLine) {
                         ctx.beginPath();
                     }
 
-                    if(index > 0) {
+                    if (index > 0) {
                         // This is a grid line in the centre, so drop that
                         ctx.lineWidth = this.gridLineWidth;
                         ctx.strokeStyle = this.gridLineColor;
@@ -1681,7 +1681,7 @@
 
                     linePositionY += helpers.aliasPixel(ctx.lineWidth);
 
-                    if(drawHorizontalLine) {
+                    if (drawHorizontalLine) {
                         ctx.moveTo(xStart, linePositionY);
                         ctx.lineTo(this.width, linePositionY);
                         ctx.stroke();
@@ -1698,7 +1698,7 @@
 
                 }, this);
 
-                each(this.xLabels, function(label, index) {
+                each(this.xLabels, function (label, index) {
                     var xPos = this.calculateX(index) + aliasPixel(this.lineWidth),
                         // Check to see if line/bar here and decide where to place the line
                         linePos = this.calculateX(index - (this.offsetGridLines ? 0.5 : 0)) + aliasPixel(this.lineWidth),
@@ -1706,15 +1706,15 @@
                         drawVerticalLine = this.showVerticalLines;
 
                     // This is Y axis, so draw it
-                    if(index === 0 && !drawVerticalLine) {
+                    if (index === 0 && !drawVerticalLine) {
                         drawVerticalLine = true;
                     }
 
-                    if(drawVerticalLine) {
+                    if (drawVerticalLine) {
                         ctx.beginPath();
                     }
 
-                    if(index > 0) {
+                    if (index > 0) {
                         // This is a grid line in the centre, so drop that
                         ctx.lineWidth = this.gridLineWidth;
                         ctx.strokeStyle = this.gridLineColor;
@@ -1724,7 +1724,7 @@
                         ctx.strokeStyle = this.lineColor;
                     }
 
-                    if(drawVerticalLine) {
+                    if (drawVerticalLine) {
                         ctx.moveTo(linePos, this.endPoint);
                         ctx.lineTo(linePos, this.startPoint - 3);
                         ctx.stroke();
@@ -1759,39 +1759,39 @@
     });
 
     Chart.RadialScale = Chart.Element.extend({
-        initialize: function() {
+        initialize: function () {
             this.size = min([this.height, this.width]);
             this.drawingArea = (this.display) ? (this.size / 2) - (this.fontSize / 2 + this.backdropPaddingY) : (this.size / 2);
         },
-        calculateCenterOffset: function(value) {
+        calculateCenterOffset: function (value) {
             // Take into account half font size + the yPadding of the top value
             var scalingFactor = this.drawingArea / (this.max - this.min);
 
-            return(value - this.min) * scalingFactor;
+            return (value - this.min) * scalingFactor;
         },
-        update: function() {
-            if(!this.lineArc) {
+        update: function () {
+            if (!this.lineArc) {
                 this.setScaleSize();
             } else {
                 this.drawingArea = (this.display) ? (this.size / 2) - (this.fontSize / 2 + this.backdropPaddingY) : (this.size / 2);
             }
             this.buildYLabels();
         },
-        buildYLabels: function() {
+        buildYLabels: function () {
             this.yLabels = [];
 
             var stepDecimalPlaces = getDecimalPlaces(this.stepValue);
 
-            for(var i = 0; i <= this.steps; i++) {
+            for (var i = 0; i <= this.steps; i++) {
                 this.yLabels.push(template(this.templateString, {
                     value: (this.min + (i * this.stepValue)).toFixed(stepDecimalPlaces)
                 }));
             }
         },
-        getCircumference: function() {
-            return((Math.PI * 2) / this.valuesCount);
+        getCircumference: function () {
+            return ((Math.PI * 2) / this.valuesCount);
         },
-        setScaleSize: function() {
+        setScaleSize: function () {
             /*
              * Right, this is really confusing and there is a lot of maths going on here
              * The gist of the problem is here: https://gist.github.com/nnnick/696cc9c55f4b0beb8fe9
@@ -1840,34 +1840,34 @@
                 radiusReductionLeft,
                 maxWidthRadius;
             this.ctx.font = fontString(this.pointLabelFontSize, this.pointLabelFontStyle, this.pointLabelFontFamily);
-            for(i = 0; i < this.valuesCount; i++) {
+            for (i = 0; i < this.valuesCount; i++) {
                 // 5px to space the text slightly out - similar to what we do in the draw function.
                 pointPosition = this.getPointPosition(i, largestPossibleRadius);
                 textWidth = this.ctx.measureText(template(this.templateString, {
                     value: this.labels[i]
                 })).width + 5;
-                if(i === 0 || i === this.valuesCount / 2) {
+                if (i === 0 || i === this.valuesCount / 2) {
                     // If we're at index zero, or exactly the middle, we're at exactly the top/bottom
                     // of the radar chart, so text will be aligned centrally, so we'll half it and compare
                     // w/left and right text sizes
                     halfTextWidth = textWidth / 2;
-                    if(pointPosition.x + halfTextWidth > furthestRight) {
+                    if (pointPosition.x + halfTextWidth > furthestRight) {
                         furthestRight = pointPosition.x + halfTextWidth;
                         furthestRightIndex = i;
                     }
-                    if(pointPosition.x - halfTextWidth < furthestLeft) {
+                    if (pointPosition.x - halfTextWidth < furthestLeft) {
                         furthestLeft = pointPosition.x - halfTextWidth;
                         furthestLeftIndex = i;
                     }
-                } else if(i < this.valuesCount / 2) {
+                } else if (i < this.valuesCount / 2) {
                     // Less than half the values means we'll left align the text
-                    if(pointPosition.x + textWidth > furthestRight) {
+                    if (pointPosition.x + textWidth > furthestRight) {
                         furthestRight = pointPosition.x + textWidth;
                         furthestRightIndex = i;
                     }
-                } else if(i > this.valuesCount / 2) {
+                } else if (i > this.valuesCount / 2) {
                     // More than half the values means we'll right align the text
-                    if(pointPosition.x - textWidth < furthestLeft) {
+                    if (pointPosition.x - textWidth < furthestLeft) {
                         furthestLeft = pointPosition.x - textWidth;
                         furthestLeftIndex = i;
                     }
@@ -1896,7 +1896,7 @@
             this.setCenterPoint(radiusReductionLeft, radiusReductionRight);
 
         },
-        setCenterPoint: function(leftMovement, rightMovement) {
+        setCenterPoint: function (leftMovement, rightMovement) {
 
             var maxRight = this.width - rightMovement - this.drawingArea,
                 maxLeft = leftMovement + this.drawingArea;
@@ -1906,44 +1906,44 @@
             this.yCenter = (this.height / 2);
         },
 
-        getIndexAngle: function(index) {
+        getIndexAngle: function (index) {
             var angleMultiplier = (Math.PI * 2) / this.valuesCount;
             // Start from the top instead of right, so remove a quarter of the circle
 
             return index * angleMultiplier - (Math.PI / 2);
         },
-        getPointPosition: function(index, distanceFromCenter) {
+        getPointPosition: function (index, distanceFromCenter) {
             var thisAngle = this.getIndexAngle(index);
             return {
                 x: (Math.cos(thisAngle) * distanceFromCenter) + this.xCenter,
                 y: (Math.sin(thisAngle) * distanceFromCenter) + this.yCenter
             };
         },
-        draw: function() {
-            if(this.display) {
+        draw: function () {
+            if (this.display) {
                 var ctx = this.ctx;
-                each(this.yLabels, function(label, index) {
+                each(this.yLabels, function (label, index) {
                     // Don't draw a centre value
-                    if(index > 0) {
+                    if (index > 0) {
                         var yCenterOffset = index * (this.drawingArea / this.steps),
                             yHeight = this.yCenter - yCenterOffset,
                             pointPosition;
 
                         // Draw circular lines around the scale
-                        if(this.lineWidth > 0) {
+                        if (this.lineWidth > 0) {
                             ctx.strokeStyle = this.lineColor;
                             ctx.lineWidth = this.lineWidth;
 
-                            if(this.lineArc) {
+                            if (this.lineArc) {
                                 ctx.beginPath();
                                 ctx.arc(this.xCenter, this.yCenter, yCenterOffset, 0, Math.PI * 2);
                                 ctx.closePath();
                                 ctx.stroke();
                             } else {
                                 ctx.beginPath();
-                                for(var i = 0; i < this.valuesCount; i++) {
+                                for (var i = 0; i < this.valuesCount; i++) {
                                     pointPosition = this.getPointPosition(i, this.calculateCenterOffset(this.min + (index * this.stepValue)));
-                                    if(i === 0) {
+                                    if (i === 0) {
                                         ctx.moveTo(pointPosition.x, pointPosition.y);
                                     } else {
                                         ctx.lineTo(pointPosition.x, pointPosition.y);
@@ -1953,9 +1953,9 @@
                                 ctx.stroke();
                             }
                         }
-                        if(this.showLabels) {
+                        if (this.showLabels) {
                             ctx.font = fontString(this.fontSize, this.fontStyle, this.fontFamily);
-                            if(this.showLabelBackdrop) {
+                            if (this.showLabelBackdrop) {
                                 var labelWidth = ctx.measureText(label).width;
                                 ctx.fillStyle = this.backdropColor;
                                 ctx.fillRect(
@@ -1973,11 +1973,11 @@
                     }
                 }, this);
 
-                if(!this.lineArc) {
+                if (!this.lineArc) {
                     ctx.lineWidth = this.angleLineWidth;
                     ctx.strokeStyle = this.angleLineColor;
-                    for(var i = this.valuesCount - 1; i >= 0; i--) {
-                        if(this.angleLineWidth > 0) {
+                    for (var i = this.valuesCount - 1; i >= 0; i--) {
+                        if (this.angleLineWidth > 0) {
                             var outerPosition = this.getPointPosition(i, this.calculateCenterOffset(this.max));
                             ctx.beginPath();
                             ctx.moveTo(this.xCenter, this.yCenter);
@@ -1995,20 +1995,20 @@
                             quarterLabelsCount = halfLabelsCount / 2,
                             upperHalf = (i < quarterLabelsCount || i > labelsCount - quarterLabelsCount),
                             exactQuarter = (i === quarterLabelsCount || i === labelsCount - quarterLabelsCount);
-                        if(i === 0) {
+                        if (i === 0) {
                             ctx.textAlign = 'center';
-                        } else if(i === halfLabelsCount) {
+                        } else if (i === halfLabelsCount) {
                             ctx.textAlign = 'center';
-                        } else if(i < halfLabelsCount) {
+                        } else if (i < halfLabelsCount) {
                             ctx.textAlign = 'left';
                         } else {
                             ctx.textAlign = 'right';
                         }
 
                         // Set the correct text baseline based on outer positioning
-                        if(exactQuarter) {
+                        if (exactQuarter) {
                             ctx.textBaseline = 'middle';
-                        } else if(upperHalf) {
+                        } else if (upperHalf) {
                             ctx.textBaseline = 'bottom';
                         } else {
                             ctx.textBaseline = 'top';
@@ -2022,16 +2022,16 @@
     });
 
     // Attach global event to resize each chart instance when the browser resizes
-    helpers.addEvent(window, "resize", (function() {
+    helpers.addEvent(window, "resize", (function () {
         // Basic debounce of resize function so it doesn't hurt performance when resizing browser.
         var timeout;
-        return function() {
+        return function () {
             clearTimeout(timeout);
-            timeout = setTimeout(function() {
-                each(Chart.instances, function(instance) {
+            timeout = setTimeout(function () {
+                each(Chart.instances, function (instance) {
                     // If the responsive flag is set in the chart instance config
                     // Cascade the resize event down to the chart.
-                    if(instance.options.responsive) {
+                    if (instance.options.responsive) {
                         instance.resize(instance.render, true);
                     }
                 });
@@ -2040,11 +2040,11 @@
     })());
 
 
-    if(amd) {
-        define(function() {
+    if (amd) {
+        define(function () {
             return Chart;
         });
-    } else if(typeof module === 'object' && module.exports) {
+    } else if (typeof module === 'object' && module.exports) {
         module.exports = Chart;
     }
 
@@ -2052,9 +2052,9 @@
 
     /// ----- ZUI change begin -----
     /// Use jquery object to create Chart object
-    $.fn.chart = function() {
+    $.fn.chart = function () {
         var charts = [];
-        this.each(function() {
+        this.each(function () {
             charts.push(new Chart(this.getContext("2d")));
         });
         return charts.length === 1 ? charts[0] : charts;
@@ -2097,7 +2097,7 @@
 /// Add jquery object to namespace
 
 /// (function(){ // Old code
-(function($) {
+(function ($) {
 
     /// ----- ZUI change end -----
     "use strict";
@@ -2170,7 +2170,7 @@
         name: "Line",
         defaults: defaultConfig,
 
-        initialize: function(data) {
+        initialize: function (data) {
             //Declare the extension of the default point, to cater for the options passed in to the constructor
             this.PointClass = Chart.Point.extend({
                 strokeWidth: this.options.pointDotStrokeWidth,
@@ -2178,21 +2178,21 @@
                 display: this.options.pointDot,
                 hitDetectionRadius: this.options.pointHitDetectionRadius,
                 ctx: this.chart.ctx,
-                inRange: function(mouseX) {
-                    return(Math.pow(mouseX - this.x, 2) < Math.pow(this.radius + this.hitDetectionRadius, 2));
+                inRange: function (mouseX) {
+                    return (Math.pow(mouseX - this.x, 2) < Math.pow(this.radius + this.hitDetectionRadius, 2));
                 }
             });
 
             this.datasets = [];
 
             //Set up tooltip events on the chart
-            if(this.options.showTooltips) {
-                helpers.bindEvents(this, this.options.tooltipEvents, function(evt) {
+            if (this.options.showTooltips) {
+                helpers.bindEvents(this, this.options.tooltipEvents, function (evt) {
                     var activePoints = (evt.type !== 'mouseout') ? this.getPointsAtEvent(evt) : [];
-                    this.eachPoints(function(point) {
+                    this.eachPoints(function (point) {
                         point.restore(['fillColor', 'strokeColor']);
                     });
-                    helpers.each(activePoints, function(activePoint) {
+                    helpers.each(activePoints, function (activePoint) {
                         activePoint.fillColor = activePoint.highlightFill;
                         activePoint.strokeColor = activePoint.highlightStroke;
                     });
@@ -2201,19 +2201,19 @@
             }
 
             //Iterate through each of the datasets, and build this into a property of the chart
-            helpers.each(data.datasets, function(dataset) {
+            helpers.each(data.datasets, function (dataset) {
                 /// ----- ZUI change begin -----
                 // add color theme
-                if($.zui && $.zui.Color && $.zui.Color.get) {
+                if ($.zui && $.zui.Color && $.zui.Color.get) {
                     var accentColor = $.zui.Color.get(dataset.color);
                     var accentColorValue = accentColor.toCssStr();
 
-                    if(!dataset.fillColor) dataset.fillColor = accentColor.clone().fade(20).toCssStr();
-                    if(!dataset.strokeColor) dataset.strokeColor = accentColorValue;
-                    if(!dataset.pointColor) dataset.pointColor = accentColorValue;
-                    if(!dataset.pointStrokeColor) dataset.pointStrokeColor = '#fff';
-                    if(!dataset.pointHighlightFill) dataset.pointHighlightFill = '#fff';
-                    if(!dataset.pointHighlightStroke) dataset.pointHighlightStroke = accentColorValue;
+                    if (!dataset.fillColor) dataset.fillColor = accentColor.clone().fade(20).toCssStr();
+                    if (!dataset.strokeColor) dataset.strokeColor = accentColorValue;
+                    if (!dataset.pointColor) dataset.pointColor = accentColorValue;
+                    if (!dataset.pointStrokeColor) dataset.pointStrokeColor = '#fff';
+                    if (!dataset.pointHighlightFill) dataset.pointHighlightFill = '#fff';
+                    if (!dataset.pointHighlightStroke) dataset.pointHighlightStroke = accentColorValue;
                 }
                 /// ----- ZUI change begin -----
 
@@ -2232,7 +2232,7 @@
                 this.datasets.push(datasetObject);
 
 
-                helpers.each(dataset.data, function(dataPoint, index) {
+                helpers.each(dataset.data, function (dataPoint, index) {
                     //Add a new point for each piece of data, passing any required data to draw.
                     datasetObject.points.push(new this.PointClass({
                         value: dataPoint,
@@ -2248,7 +2248,7 @@
                 this.buildScale(data.labels);
 
 
-                this.eachPoints(function(point, index) {
+                this.eachPoints(function (point, index) {
                     helpers.extend(point, {
                         x: this.scale.calculateX(index),
                         y: this.scale.endPoint
@@ -2261,38 +2261,38 @@
 
             this.render();
         },
-        update: function() {
+        update: function () {
             this.scale.update();
             // Reset any highlight colours before updating.
-            helpers.each(this.activeElements, function(activeElement) {
+            helpers.each(this.activeElements, function (activeElement) {
                 activeElement.restore(['fillColor', 'strokeColor']);
             });
-            this.eachPoints(function(point) {
+            this.eachPoints(function (point) {
                 point.save();
             });
             this.render();
         },
-        eachPoints: function(callback) {
-            helpers.each(this.datasets, function(dataset) {
+        eachPoints: function (callback) {
+            helpers.each(this.datasets, function (dataset) {
                 helpers.each(dataset.points, callback, this);
             }, this);
         },
-        getPointsAtEvent: function(e) {
+        getPointsAtEvent: function (e) {
             var pointsArray = [],
                 eventPosition = helpers.getRelativePosition(e);
-            helpers.each(this.datasets, function(dataset) {
-                helpers.each(dataset.points, function(point) {
-                    if(point.inRange(eventPosition.x, eventPosition.y)) pointsArray.push(point);
+            helpers.each(this.datasets, function (dataset) {
+                helpers.each(dataset.points, function (point) {
+                    if (point.inRange(eventPosition.x, eventPosition.y)) pointsArray.push(point);
                 });
             }, this);
             return pointsArray;
         },
-        buildScale: function(labels) {
+        buildScale: function (labels) {
             var self = this;
 
-            var dataTotal = function() {
+            var dataTotal = function () {
                 var values = [];
-                self.eachPoints(function(point) {
+                self.eachPoints(function (point) {
                     values.push(point.value);
                 });
 
@@ -2311,7 +2311,7 @@
                 valuesCount: labels.length,
                 beginAtZero: this.options.scaleBeginAtZero,
                 integersOnly: this.options.scaleIntegersOnly,
-                calculateYRange: function(currentHeight) {
+                calculateYRange: function (currentHeight) {
                     var updatedRanges = helpers.calculateScaleRange(
                         dataTotal(),
                         currentHeight,
@@ -2337,7 +2337,7 @@
                 display: this.options.showScale
             };
 
-            if(this.options.scaleOverride) {
+            if (this.options.scaleOverride) {
                 helpers.extend(scaleOptions, {
                     calculateYRange: helpers.noop,
                     steps: this.options.scaleSteps,
@@ -2350,10 +2350,10 @@
 
             this.scale = new Chart.Scale(scaleOptions);
         },
-        addData: function(valuesArray, label) {
+        addData: function (valuesArray, label) {
             //Map the values array for each of the datasets
 
-            helpers.each(valuesArray, function(value, datasetIndex) {
+            helpers.each(valuesArray, function (value, datasetIndex) {
                 //Add a new point for each piece of data, passing any required data to draw.
                 this.datasets[datasetIndex].points.push(new this.PointClass({
                     value: value,
@@ -2369,49 +2369,49 @@
             //Then re-render the chart.
             this.update();
         },
-        removeData: function() {
+        removeData: function () {
             this.scale.removeXLabel();
             //Then re-render the chart.
-            helpers.each(this.datasets, function(dataset) {
+            helpers.each(this.datasets, function (dataset) {
                 dataset.points.shift();
             }, this);
             this.update();
         },
-        reflow: function() {
+        reflow: function () {
             var newScaleProps = helpers.extend({
                 height: this.chart.height,
                 width: this.chart.width
             });
             this.scale.update(newScaleProps);
         },
-        draw: function(ease) {
+        draw: function (ease) {
             var easingDecimal = ease || 1;
             this.clear();
 
             var ctx = this.chart.ctx;
 
             // Some helper methods for getting the next/prev points
-            var hasValue = function(item) {
-                    return item.value !== null;
-                },
-                nextPoint = function(point, collection, index) {
+            var hasValue = function (item) {
+                return item.value !== null;
+            },
+                nextPoint = function (point, collection, index) {
                     return helpers.findNextWhere(collection, hasValue, index) || point;
                 },
-                previousPoint = function(point, collection, index) {
+                previousPoint = function (point, collection, index) {
                     return helpers.findPreviousWhere(collection, hasValue, index) || point;
                 };
 
             this.scale.draw(easingDecimal);
 
 
-            helpers.each(this.datasets, function(dataset) {
+            helpers.each(this.datasets, function (dataset) {
                 var pointsWithValues = helpers.where(dataset.points, hasValue);
 
                 //Transition each point first so that the line and point drawing isn't out of sync
                 //We can use this extra loop to calculate the control points of this dataset also in this loop
 
-                helpers.each(dataset.points, function(point, index) {
-                    if(point.hasValue()) {
+                helpers.each(dataset.points, function (point, index) {
+                    if (point.hasValue()) {
                         point.transition({
                             y: this.scale.calculateY(point.value),
                             x: this.scale.calculateX(index)
@@ -2422,8 +2422,8 @@
 
                 // Control points need to be calculated in a seperate loop, because we need to know the current x/y of the point
                 // This would cause issues when there is no animation, because the y of the next point would be 0, so beziers would be skewed
-                if(this.options.bezierCurve) {
-                    helpers.each(pointsWithValues, function(point, index) {
+                if (this.options.bezierCurve) {
+                    helpers.each(pointsWithValues, function (point, index) {
                         var tension = (index > 0 && index < pointsWithValues.length - 1) ? this.options.bezierCurveTension : 0;
                         point.controlPoints = helpers.splineCurve(
                             previousPoint(point, pointsWithValues, index),
@@ -2435,16 +2435,16 @@
                         // Prevent the bezier going outside of the bounds of the graph
 
                         // Cap puter bezier handles to the upper/lower scale bounds
-                        if(point.controlPoints.outer.y > this.scale.endPoint) {
+                        if (point.controlPoints.outer.y > this.scale.endPoint) {
                             point.controlPoints.outer.y = this.scale.endPoint;
-                        } else if(point.controlPoints.outer.y < this.scale.startPoint) {
+                        } else if (point.controlPoints.outer.y < this.scale.startPoint) {
                             point.controlPoints.outer.y = this.scale.startPoint;
                         }
 
                         // Cap inner bezier handles to the upper/lower scale bounds
-                        if(point.controlPoints.inner.y > this.scale.endPoint) {
+                        if (point.controlPoints.inner.y > this.scale.endPoint) {
                             point.controlPoints.inner.y = this.scale.endPoint;
-                        } else if(point.controlPoints.inner.y < this.scale.startPoint) {
+                        } else if (point.controlPoints.inner.y < this.scale.startPoint) {
                             point.controlPoints.inner.y = this.scale.startPoint;
                         }
                     }, this);
@@ -2456,11 +2456,11 @@
                 ctx.strokeStyle = dataset.strokeColor;
                 ctx.beginPath();
 
-                helpers.each(pointsWithValues, function(point, index) {
-                    if(index === 0) {
+                helpers.each(pointsWithValues, function (point, index) {
+                    if (index === 0) {
                         ctx.moveTo(point.x, point.y);
                     } else {
-                        if(this.options.bezierCurve) {
+                        if (this.options.bezierCurve) {
                             var previous = previousPoint(point, pointsWithValues, index);
 
                             ctx.bezierCurveTo(
@@ -2479,7 +2479,7 @@
 
                 ctx.stroke();
 
-                if(this.options.datasetFill && pointsWithValues.length > 0) {
+                if (this.options.datasetFill && pointsWithValues.length > 0) {
                     //Round off the line by going to the base of the chart, back to the start, then fill.
                     ctx.lineTo(pointsWithValues[pointsWithValues.length - 1].x, this.scale.endPoint);
                     ctx.lineTo(pointsWithValues[0].x, this.scale.endPoint);
@@ -2491,7 +2491,7 @@
                 //Now draw the points over the line
                 //A little inefficient double looping, but better than the line
                 //lagging behind the point positions
-                helpers.each(pointsWithValues, function(point) {
+                helpers.each(pointsWithValues, function (point) {
                     point.draw();
                 });
             }, this);
@@ -2500,9 +2500,9 @@
 
     /// ----- ZUI change begin -----
     /// Use jquery object to create Chart object
-    $.fn.lineChart = function(data, options) {
+    $.fn.lineChart = function (data, options) {
         var lineCharts = [];
-        this.each(function() {
+        this.each(function () {
             var $this = $(this);
             lineCharts.push(new Chart(this.getContext("2d")).Line(data, $.extend($this.data(), options)));
         });
@@ -2536,7 +2536,7 @@
 /// Add jquery object to namespace
 
 /// (function(){ // Old code
-(function($) {
+(function ($) {
 
     /// ----- ZUI change end -----
     "use strict";
@@ -2604,7 +2604,7 @@
         defaults: defaultConfig,
         //Initialize is fired when the chart is initialized - Data is passed in as a parameter
         //Config is automatically merged by the core of Chart.js, and is available at this.options
-        initialize: function(data) {
+        initialize: function (data) {
 
             //Declare segments as a static property to prevent inheriting across the Chart type prototype
             this.segments = [];
@@ -2617,14 +2617,14 @@
             });
 
             //Set up tooltip events on the chart
-            if(this.options.showTooltips) {
-                helpers.bindEvents(this, this.options.tooltipEvents, function(evt) {
+            if (this.options.showTooltips) {
+                helpers.bindEvents(this, this.options.tooltipEvents, function (evt) {
                     var activeSegments = (evt.type !== 'mouseout') ? this.getSegmentsAtEvent(evt) : [];
 
-                    helpers.each(this.segments, function(segment) {
+                    helpers.each(this.segments, function (segment) {
                         segment.restore(["fillColor"]);
                     });
-                    helpers.each(activeSegments, function(activeSegment) {
+                    helpers.each(activeSegments, function (activeSegment) {
                         activeSegment.fillColor = activeSegment.highlightColor;
                     });
                     this.showTooltip(activeSegments);
@@ -2632,29 +2632,29 @@
             }
             this.calculateTotal(data);
 
-            helpers.each(data, function(datapoint, index) {
+            helpers.each(data, function (datapoint, index) {
                 this.addData(datapoint, index, true);
             }, this);
 
             this.render();
         },
-        getSegmentsAtEvent: function(e) {
+        getSegmentsAtEvent: function (e) {
             var segmentsArray = [];
 
             var location = helpers.getRelativePosition(e);
 
-            helpers.each(this.segments, function(segment) {
-                if(segment.inRange(location.x, location.y)) segmentsArray.push(segment);
+            helpers.each(this.segments, function (segment) {
+                if (segment.inRange(location.x, location.y)) segmentsArray.push(segment);
             }, this);
             return segmentsArray;
         },
-        addData: function(segment, atIndex, silent) {
+        addData: function (segment, atIndex, silent) {
             /// ----- ZUI change begin -----
             /// Init segment color
-            if($.zui && $.zui.Color && $.zui.Color.get) {
+            if ($.zui && $.zui.Color && $.zui.Color.get) {
                 var color = new $.zui.Color.get(segment.color);
                 segment.color = color.toCssStr();
-                if(!segment.highlight) segment.highlight = color.lighten(5).toCssStr();
+                if (!segment.highlight) segment.highlight = color.lighten(5).toCssStr();
             }
             /// ----- ZUI change end -----
             var index = atIndex || this.segments.length;
@@ -2675,48 +2675,48 @@
                 /// ----- ZUI change end -----
                 label: segment.label
             }));
-            if(!silent) {
+            if (!silent) {
                 this.reflow();
                 this.update();
             }
         },
-        calculateCircumference: function(value) {
-            return(Math.PI * 2) * (Math.abs(value) / this.total);
+        calculateCircumference: function (value) {
+            return (Math.PI * 2) * (Math.abs(value) / this.total);
         },
-        calculateTotal: function(data) {
+        calculateTotal: function (data) {
             this.total = 0;
-            helpers.each(data, function(segment) {
+            helpers.each(data, function (segment) {
                 this.total += Math.abs(segment.value);
             }, this);
         },
-        update: function() {
+        update: function () {
             this.calculateTotal(this.segments);
 
             // Reset any highlight colours before updating.
-            helpers.each(this.activeElements, function(activeElement) {
+            helpers.each(this.activeElements, function (activeElement) {
                 activeElement.restore(['fillColor']);
             });
 
-            helpers.each(this.segments, function(segment) {
+            helpers.each(this.segments, function (segment) {
                 segment.save();
             });
             this.render();
         },
 
-        removeData: function(atIndex) {
+        removeData: function (atIndex) {
             var indexToDelete = (helpers.isNumber(atIndex)) ? atIndex : this.segments.length - 1;
             this.segments.splice(indexToDelete, 1);
             this.reflow();
             this.update();
         },
 
-        reflow: function() {
+        reflow: function () {
             helpers.extend(this.SegmentArc.prototype, {
                 x: this.chart.width / 2,
                 y: this.chart.height / 2
             });
             this.outerRadius = (helpers.min([this.chart.width, this.chart.height]) - this.options.segmentStrokeWidth / 2) / 2;
-            helpers.each(this.segments, function(segment) {
+            helpers.each(this.segments, function (segment) {
                 segment.update({
                     outerRadius: this.outerRadius,
                     innerRadius: (this.outerRadius / 100) * this.options.percentageInnerCutout
@@ -2724,13 +2724,13 @@
             }, this);
         },
         /// ZUI change begin
-        drawLabel: function(segment, easeDecimal, labelPosMap) {
+        drawLabel: function (segment, easeDecimal, labelPosMap) {
             var options = this.options;
             var middleAngle = (segment.endAngle + segment.startAngle) / 2;
             var placement = options.scaleLabelPlacement;
-            if(placement !== 'inside' && placement !== 'outside') {
-                if((this.chart.width - this.chart.height) > 50) {
-                    if(segment.circumference < (Math.PI / 18)) {
+            if (placement !== 'inside' && placement !== 'outside') {
+                if ((this.chart.width - this.chart.height) > 50) {
+                    if (segment.circumference < (Math.PI / 18)) {
                         placement = 'outside';
                     }
                 }
@@ -2752,13 +2752,13 @@
             var chartWidthHalf = this.chart.width / 2;
             var chartHeightHalf = this.chart.height / 2;
 
-            if(placement === 'outside') { // outside
+            if (placement === 'outside') { // outside
                 var isRight = x >= 0;
                 var lineX = x + chartWidthHalf;
                 var lineY = y + chartHeightHalf;
                 ctx.textAlign = isRight ? 'left' : 'right';
                 ctx.measureText(text).width;
-                if(isRight) {
+                if (isRight) {
                     x = Math.max(chartWidthHalf + segment.outerRadius + 10, x + 30 + chartWidthHalf);
                 } else {
                     x = Math.min(chartWidthHalf - segment.outerRadius - 10, x - 30 + chartWidthHalf);
@@ -2768,15 +2768,15 @@
                 var labelPos = Math.round((y * 0.8 + chartHeightHalf) / textHeight) + 1;
                 var maxPos = Math.floor(this.chart.width / textHeight) + 1;
                 var labelPosDirection = isRight ? 1 : (-1);
-                if(labelPosMap[labelPos*labelPosDirection]) {
-                    if(labelPos > 1) labelPos--;
+                if (labelPosMap[labelPos * labelPosDirection]) {
+                    if (labelPos > 1) labelPos--;
                     else labelPos++;
                 }
                 // while(labelPosMap[labelPos*labelPosDirection] && labelPos < maxPos) labelPos++;
 
-                if(labelPosMap[labelPos*labelPosDirection]) return;
+                if (labelPosMap[labelPos * labelPosDirection]) return;
                 y = (labelPos - 1) * textHeight + options.scaleFontSize / 2;
-                labelPosMap[labelPos*labelPosDirection] = true;
+                labelPosMap[labelPos * labelPosDirection] = true;
 
                 ctx.beginPath();
                 ctx.moveTo(lineX, lineY);
@@ -2795,13 +2795,13 @@
             ctx.fillText(text, x, y);
         },
         // ZUI change end
-        draw: function(easeDecimal) {
+        draw: function (easeDecimal) {
             var animDecimal = (easeDecimal) ? easeDecimal : 1;
             this.clear();
             // ZUI change begin
             var labelPositionMap;
             // ZUI change end
-            helpers.each(this.segments, function(segment, index) {
+            helpers.each(this.segments, function (segment, index) {
                 segment.transition({
                     circumference: this.calculateCircumference(segment.value),
                     outerRadius: this.outerRadius,
@@ -2811,21 +2811,21 @@
                 segment.endAngle = segment.startAngle + segment.circumference;
 
                 segment.draw();
-                if(index === 0) {
+                if (index === 0) {
                     segment.startAngle = Math.PI * 1.5;
                 }
                 //Check to see if it's the last segment, if not get the next and update the start angle
-                if(index < this.segments.length - 1) {
+                if (index < this.segments.length - 1) {
                     this.segments[index + 1].startAngle = segment.endAngle;
                 }
             }, this);
 
             /// ZUI change begin
-            if(this.options.scaleShowLabels) {
-                var segmentsArray = this.segments.slice().sort(function(a,b){return b.value - a.value;});
+            if (this.options.scaleShowLabels) {
+                var segmentsArray = this.segments.slice().sort(function (a, b) { return b.value - a.value; });
                 var labelPositionMap = {};
-                helpers.each(segmentsArray, function(segment, index) {
-                    if(segment.showLabel) this.drawLabel(segment, easeDecimal, labelPositionMap);
+                helpers.each(segmentsArray, function (segment, index) {
+                    if (segment.showLabel) this.drawLabel(segment, easeDecimal, labelPositionMap);
                 }, this);
             }
             /// ZUI change end
@@ -2841,18 +2841,18 @@
 
     /// ----- ZUI change begin -----
     /// Use jquery object to create Chart object
-    $.fn.pieChart = function(data, options) {
+    $.fn.pieChart = function (data, options) {
         var pieCharts = [];
-        this.each(function() {
+        this.each(function () {
             var $this = $(this);
             pieCharts.push(new Chart(this.getContext("2d")).Pie(data, $.extend($this.data(), options)));
         });
         return pieCharts.length === 1 ? pieCharts[0] : pieCharts;
     }
 
-    $.fn.doughnutChart = function(data, options) {
+    $.fn.doughnutChart = function (data, options) {
         var doughnutCharts = [];
-        this.each(function() {
+        this.each(function () {
             var $this = $(this);
             doughnutCharts.push(new Chart(this.getContext("2d")).Doughnut(data, $.extend($this.data(), options)));
         });
@@ -2887,7 +2887,7 @@
 /// Add jquery object to namespace
 
 /// (function(){ // Old code
-(function($) {
+(function ($) {
 
     /// ----- ZUI change end -----
     "use strict";
@@ -2952,14 +2952,14 @@
     Chart.Type.extend({
         name: "Bar",
         defaults: defaultConfig,
-        initialize: function(data) {
+        initialize: function (data) {
 
             //Expose options as a scope variable here so we can access it in the ScaleClass
             var options = this.options;
 
             this.ScaleClass = Chart.Scale.extend({
                 offsetGridLines: true,
-                calculateBarX: function(datasetCount, datasetIndex, barIndex) {
+                calculateBarX: function (datasetCount, datasetIndex, barIndex) {
                     //Reusable method for calculating the xPosition of a given bar based on datasetIndex & width of the bar
                     var xWidth = this.calculateBaseWidth(),
                         xAbsolute = this.calculateX(barIndex) - (xWidth / 2),
@@ -2967,28 +2967,28 @@
 
                     return xAbsolute + (barWidth * datasetIndex) + (datasetIndex * options.barDatasetSpacing) + barWidth / 2;
                 },
-                calculateBaseWidth: function() {
-                    return(this.calculateX(1) - this.calculateX(0)) - (2 * options.barValueSpacing);
+                calculateBaseWidth: function () {
+                    return (this.calculateX(1) - this.calculateX(0)) - (2 * options.barValueSpacing);
                 },
-                calculateBarWidth: function(datasetCount) {
+                calculateBarWidth: function (datasetCount) {
                     //The padding between datasets is to the right of each bar, providing that there are more than 1 dataset
                     var baseWidth = this.calculateBaseWidth() - ((datasetCount - 1) * options.barDatasetSpacing);
 
-                    return(baseWidth / datasetCount);
+                    return (baseWidth / datasetCount);
                 }
             });
 
             this.datasets = [];
 
             //Set up tooltip events on the chart
-            if(this.options.showTooltips) {
-                helpers.bindEvents(this, this.options.tooltipEvents, function(evt) {
+            if (this.options.showTooltips) {
+                helpers.bindEvents(this, this.options.tooltipEvents, function (evt) {
                     var activeBars = (evt.type !== 'mouseout') ? this.getBarsAtEvent(evt) : [];
 
-                    this.eachBars(function(bar) {
+                    this.eachBars(function (bar) {
                         bar.restore(['fillColor', 'strokeColor']);
                     });
-                    helpers.each(activeBars, function(activeBar) {
+                    helpers.each(activeBars, function (activeBar) {
                         activeBar.fillColor = activeBar.highlightFill;
                         activeBar.strokeColor = activeBar.highlightStroke;
                     });
@@ -3004,15 +3004,15 @@
             });
 
             //Iterate through each of the datasets, and build this into a property of the chart
-            helpers.each(data.datasets, function(dataset, datasetIndex) {
+            helpers.each(data.datasets, function (dataset, datasetIndex) {
                 /// ----- ZUI change begin -----
                 // add color theme
-                if($.zui && $.zui.Color && $.zui.Color.get) {
+                if ($.zui && $.zui.Color && $.zui.Color.get) {
                     var accentColor = $.zui.Color.get(dataset.color);
                     var accentColorValue = accentColor.toCssStr();
 
-                    if(!dataset.fillColor) dataset.fillColor = accentColor.clone().fade(50).toCssStr();
-                    if(!dataset.strokeColor) dataset.strokeColor = accentColorValue;
+                    if (!dataset.fillColor) dataset.fillColor = accentColor.clone().fade(50).toCssStr();
+                    if (!dataset.strokeColor) dataset.strokeColor = accentColorValue;
                 }
                 /// ----- ZUI change begin -----
 
@@ -3025,7 +3025,7 @@
 
                 this.datasets.push(datasetObject);
 
-                helpers.each(dataset.data, function(dataPoint, index) {
+                helpers.each(dataset.data, function (dataPoint, index) {
                     //Add a new point for each piece of data, passing any required data to draw.
                     datasetObject.bars.push(new this.BarClass({
                         value: dataPoint,
@@ -3044,7 +3044,7 @@
 
             this.BarClass.prototype.base = this.scale.endPoint;
 
-            this.eachBars(function(bar, index, datasetIndex) {
+            this.eachBars(function (bar, index, datasetIndex) {
                 helpers.extend(bar, {
                     width: this.scale.calculateBarWidth(this.datasets.length),
                     x: this.scale.calculateBarX(this.datasets.length, datasetIndex, index),
@@ -3055,34 +3055,34 @@
 
             this.render();
         },
-        update: function() {
+        update: function () {
             this.scale.update();
             // Reset any highlight colours before updating.
-            helpers.each(this.activeElements, function(activeElement) {
+            helpers.each(this.activeElements, function (activeElement) {
                 activeElement.restore(['fillColor', 'strokeColor']);
             });
 
-            this.eachBars(function(bar) {
+            this.eachBars(function (bar) {
                 bar.save();
             });
             this.render();
         },
-        eachBars: function(callback) {
-            helpers.each(this.datasets, function(dataset, datasetIndex) {
+        eachBars: function (callback) {
+            helpers.each(this.datasets, function (dataset, datasetIndex) {
                 helpers.each(dataset.bars, callback, this, datasetIndex);
             }, this);
         },
-        getBarsAtEvent: function(e) {
+        getBarsAtEvent: function (e) {
             var barsArray = [],
                 eventPosition = helpers.getRelativePosition(e),
-                datasetIterator = function(dataset) {
+                datasetIterator = function (dataset) {
                     barsArray.push(dataset.bars[barIndex]);
                 },
                 barIndex;
 
-            for(var datasetIndex = 0; datasetIndex < this.datasets.length; datasetIndex++) {
-                for(barIndex = 0; barIndex < this.datasets[datasetIndex].bars.length; barIndex++) {
-                    if(this.datasets[datasetIndex].bars[barIndex].inRange(eventPosition.x, eventPosition.y)) {
+            for (var datasetIndex = 0; datasetIndex < this.datasets.length; datasetIndex++) {
+                for (barIndex = 0; barIndex < this.datasets[datasetIndex].bars.length; barIndex++) {
+                    if (this.datasets[datasetIndex].bars[barIndex].inRange(eventPosition.x, eventPosition.y)) {
                         helpers.each(this.datasets, datasetIterator);
                         return barsArray;
                     }
@@ -3091,12 +3091,12 @@
 
             return barsArray;
         },
-        buildScale: function(labels) {
+        buildScale: function (labels) {
             var self = this;
 
-            var dataTotal = function() {
+            var dataTotal = function () {
                 var values = [];
-                self.eachBars(function(bar) {
+                self.eachBars(function (bar) {
                     values.push(bar.value);
                 });
                 return values;
@@ -3114,7 +3114,7 @@
                 valuesCount: labels.length,
                 beginAtZero: this.options.scaleBeginAtZero,
                 integersOnly: this.options.scaleIntegersOnly,
-                calculateYRange: function(currentHeight) {
+                calculateYRange: function (currentHeight) {
                     var updatedRanges = helpers.calculateScaleRange(
                         dataTotal(),
                         currentHeight,
@@ -3140,7 +3140,7 @@
                 display: this.options.showScale
             };
 
-            if(this.options.scaleOverride) {
+            if (this.options.scaleOverride) {
                 helpers.extend(scaleOptions, {
                     calculateYRange: helpers.noop,
                     steps: this.options.scaleSteps,
@@ -3152,9 +3152,9 @@
 
             this.scale = new this.ScaleClass(scaleOptions);
         },
-        addData: function(valuesArray, label) {
+        addData: function (valuesArray, label) {
             //Map the values array for each of the datasets
-            helpers.each(valuesArray, function(value, datasetIndex) {
+            helpers.each(valuesArray, function (value, datasetIndex) {
                 //Add a new point for each piece of data, passing any required data to draw.
                 this.datasets[datasetIndex].bars.push(new this.BarClass({
                     value: value,
@@ -3172,15 +3172,15 @@
             //Then re-render the chart.
             this.update();
         },
-        removeData: function() {
+        removeData: function () {
             this.scale.removeXLabel();
             //Then re-render the chart.
-            helpers.each(this.datasets, function(dataset) {
+            helpers.each(this.datasets, function (dataset) {
                 dataset.bars.shift();
             }, this);
             this.update();
         },
-        reflow: function() {
+        reflow: function () {
             helpers.extend(this.BarClass.prototype, {
                 y: this.scale.endPoint,
                 base: this.scale.endPoint
@@ -3192,11 +3192,11 @@
             this.scale.update(newScaleProps);
         },
         /// ZUI change begin
-        drawLabel: function(bar, placement) {
+        drawLabel: function (bar, placement) {
             var options = this.options;
             placement = placement || options.scaleValuePlacement;
             placement = placement ? placement.toLowerCase() : 'auto';
-            if(placement === 'auto') {
+            if (placement === 'auto') {
                 placement = bar.y < 15 ? 'insdie' : 'outside';
             }
 
@@ -3209,7 +3209,7 @@
             ctx.fillText(bar.value, bar.x, y);
         },
         /// ZUI change end
-        draw: function(ease) {
+        draw: function (ease) {
             var easingDecimal = ease || 1;
             this.clear();
 
@@ -3221,9 +3221,9 @@
             var showScaleValue = this.options.scaleShowLabels && this.options.scaleValuePlacement;
             /// ZUI change end
             //Draw all the bars for each dataset
-            helpers.each(this.datasets, function(dataset, datasetIndex) {
-                helpers.each(dataset.bars, function(bar, index) {
-                    if(bar.hasValue()) {
+            helpers.each(this.datasets, function (dataset, datasetIndex) {
+                helpers.each(dataset.bars, function (bar, index) {
+                    if (bar.hasValue()) {
                         bar.base = this.scale.endPoint;
                         //Transition then draw
                         bar.transition({
@@ -3233,7 +3233,7 @@
                         }, easingDecimal).draw();
                     }
                     /// ZUI change begin
-                    if(showScaleValue) {
+                    if (showScaleValue) {
                         this.drawLabel(bar);
                     }
                     /// ZUI change end
@@ -3245,9 +3245,9 @@
 
     /// ----- ZUI change begin -----
     /// Use jquery object to create Chart object
-    $.fn.barChart = function(data, options) {
+    $.fn.barChart = function (data, options) {
         var barCharts = [];
-        this.each(function() {
+        this.each(function () {
             var $this = $(this);
             barCharts.push(new Chart(this.getContext("2d")).Bar(data, $.extend($this.data(), options)));
         });
